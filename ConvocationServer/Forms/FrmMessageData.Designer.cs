@@ -67,6 +67,7 @@
             // txtDirection
             // 
             this.txtDirection.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txtDirection.Enabled = false;
             this.txtDirection.Location = new System.Drawing.Point(194, 21);
             this.txtDirection.Name = "txtDirection";
             this.txtDirection.ReadOnly = true;
@@ -77,6 +78,7 @@
             // txtTimestamp
             // 
             this.txtTimestamp.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txtTimestamp.Enabled = false;
             this.txtTimestamp.Location = new System.Drawing.Point(6, 51);
             this.txtTimestamp.Name = "txtTimestamp";
             this.txtTimestamp.ReadOnly = true;
@@ -112,7 +114,7 @@
             this.txtMessage.Location = new System.Drawing.Point(0, 0);
             this.txtMessage.Name = "txtMessage";
             this.txtMessage.ReadOnly = true;
-            this.txtMessage.Size = new System.Drawing.Size(455, 229);
+            this.txtMessage.Size = new System.Drawing.Size(461, 229);
             this.txtMessage.TabIndex = 7;
             this.txtMessage.Text = "";
             // 
@@ -121,7 +123,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.DimGray;
-            this.ClientSize = new System.Drawing.Size(455, 364);
+            this.ClientSize = new System.Drawing.Size(461, 374);
             this.ControlBox = false;
             this.Controls.Add(this.txtMessage);
             this.Controls.Add(this.groupBox1);
