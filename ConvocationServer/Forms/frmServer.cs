@@ -19,6 +19,7 @@ namespace ConvocationServer
         {
             InitializeComponent();
 
+            this.Text += " v" + Application.ProductVersion;
             notifyIcon.BalloonTipTitle = "RSL - Server";
             notifyIcon.BalloonTipText = "Double click to open!";
             notifyIcon.BalloonTipIcon = ToolTipIcon.Info;
