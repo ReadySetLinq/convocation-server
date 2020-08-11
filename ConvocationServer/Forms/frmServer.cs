@@ -1,7 +1,8 @@
-﻿using ConvocationServer.Forms;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
+using ConvocationServer.Forms;
+using ConvocationServer.Sockets;
 
 namespace ConvocationServer
 {
@@ -14,12 +15,22 @@ namespace ConvocationServer
            // MessageData = Index 1
            new FrmMessageData()
         };
+        private readonly SocketServer Server = new SocketServer();
+        private readonly System.Timers.Timer tmrFailedToConnect = new System.Timers.Timer
+        {
+            Interval = 5000,
+            AutoReset = false
+        };
+        
 
         public FrmServer()
         {
             InitializeComponent();
 
             this.Text += " v" + Application.ProductVersion;
+            this.lblStatus.Text = "Stopped";
+            this.tmrFailedToConnect.Elapsed += this.OnFailedToOpenEvent;
+
             notifyIcon.BalloonTipTitle = "RSL - Server";
             notifyIcon.BalloonTipText = "Double click to open!";
             notifyIcon.BalloonTipIcon = ToolTipIcon.Info;
@@ -43,7 +54,6 @@ namespace ConvocationServer
             notifyIcon.ShowBalloonTip(1000);
         }
 
-
         private void FrmServer_Resize(object sender, EventArgs e)
         {
             //if the form is minimized hide it from the task bar  
@@ -51,6 +61,22 @@ namespace ConvocationServer
             if (this.WindowState == FormWindowState.Minimized)
             {
                 this.MinimizeToTray();
+            }
+        }
+
+        private void LblStatus_TextChanged(object sender, EventArgs e)
+        {
+            Label lbl = this.lblStatus;
+            ToolStripMenuItem statusItem = this.statusStripMenuItem;
+
+            if (lbl.Text == "Started")
+            {
+                lbl.ForeColor = System.Drawing.Color.YellowGreen;
+                statusItem.Text = "Stop";
+            } else
+            {
+                lbl.ForeColor = System.Drawing.Color.OrangeRed;
+                statusItem.Text = "Start";
             }
         }
 
@@ -71,14 +97,42 @@ namespace ConvocationServer
 
         private void StatusStripMenuItem_Click(object sender, EventArgs e)
         {
-            bool connected = true;
-            if (connected)
+            if (this.Server.IsConnected)
             {
-                this.statusStripMenuItem.Text = "Disconnect";
+                this.Server.Stop();
+                this.lblStatus.Text = "Stopped";
             } else
             {
-                this.statusStripMenuItem.Text = "Connect";
+                if (this.Server.Start())
+                {
+                    this.lblStatus.Text = "Started";
+                    this.tmrFailedToConnect.Stop();
+                }
+                else
+                {
+                    if (!this.tmrFailedToConnect.Enabled)
+                    {
+                        this.tmrFailedToConnect.Start();
+                    }
+                    else
+                    {
+                        this.tmrFailedToConnect.Stop();
+                        this.tmrFailedToConnect.Start();
+                    }
+
+                    this.lblStatus.Text = "Failed to Start!";
+                }
             }
+        }
+
+        private void OnFailedToOpenEvent(Object source, System.Timers.ElapsedEventArgs e)
+        {
+            // Reset to status to Stopped
+            this.lblStatus.Invoke((MethodInvoker)delegate {
+                // Running on the UI thread
+                this.lblStatus.Text = "Stopped";
+            });
+
         }
 
         private void HideWindowStripMenuItem_Click(object sender, EventArgs e)
