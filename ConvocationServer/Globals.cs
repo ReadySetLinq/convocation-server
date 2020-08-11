@@ -11,10 +11,5 @@ namespace ConvocationServer
         }
 
         public static int INVALID_INT = -763281543;
-
-        public static string DB_Host = "localhost";
-        public static string DB_Name = "db_name";
-        public static string DB_User = "root";
-        public static string DB_Password = "password";
     }
 }
