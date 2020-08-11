@@ -43,11 +43,11 @@
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.infoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panelBottom = new System.Windows.Forms.Panel();
+            this.cmbDataView = new System.Windows.Forms.ComboBox();
+            this.lblStaticView = new System.Windows.Forms.Label();
             this.lblStatus = new System.Windows.Forms.Label();
             this.lblStaticStatus = new System.Windows.Forms.Label();
             this.dataGridViewMessages = new System.Windows.Forms.DataGridView();
-            this.lblStaticView = new System.Windows.Forms.Label();
-            this.cmbDataView = new System.Windows.Forms.ComboBox();
             this.columnData = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.columnDirection = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.columnTimestamp = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -87,7 +87,7 @@
             this.exitStripMenuItem});
             this.fileToolStripMenuItem.ForeColor = System.Drawing.Color.Black;
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
-            this.fileToolStripMenuItem.Size = new System.Drawing.Size(46, 26);
+            this.fileToolStripMenuItem.Size = new System.Drawing.Size(46, 24);
             this.fileToolStripMenuItem.Text = "File";
             this.fileToolStripMenuItem.ToolTipText = "FIle";
             // 
@@ -127,7 +127,7 @@
             this.manageToolStripMenuItem});
             this.usersStripMenuItem.ForeColor = System.Drawing.Color.Black;
             this.usersStripMenuItem.Name = "usersStripMenuItem";
-            this.usersStripMenuItem.Size = new System.Drawing.Size(58, 26);
+            this.usersStripMenuItem.Size = new System.Drawing.Size(58, 24);
             this.usersStripMenuItem.Text = "Users";
             // 
             // addNewToolStripMenuItem
@@ -150,7 +150,7 @@
             this.infoToolStripMenuItem});
             this.helpToolStripMenuItem.ForeColor = System.Drawing.Color.Black;
             this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
-            this.helpToolStripMenuItem.Size = new System.Drawing.Size(55, 26);
+            this.helpToolStripMenuItem.Size = new System.Drawing.Size(55, 24);
             this.helpToolStripMenuItem.Text = "Help";
             // 
             // infoToolStripMenuItem
@@ -171,6 +171,34 @@
             this.panelBottom.Name = "panelBottom";
             this.panelBottom.Size = new System.Drawing.Size(622, 40);
             this.panelBottom.TabIndex = 1;
+            // 
+            // cmbDataView
+            // 
+            this.cmbDataView.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbDataView.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cmbDataView.FormattingEnabled = true;
+            this.cmbDataView.ItemHeight = 18;
+            this.cmbDataView.Items.AddRange(new object[] {
+            "All",
+            "Incoming",
+            "Outgoing"});
+            this.cmbDataView.Location = new System.Drawing.Point(489, 6);
+            this.cmbDataView.MaxDropDownItems = 3;
+            this.cmbDataView.Name = "cmbDataView";
+            this.cmbDataView.Size = new System.Drawing.Size(121, 26);
+            this.cmbDataView.TabIndex = 99;
+            this.cmbDataView.TabStop = false;
+            this.cmbDataView.Text = "All";
+            // 
+            // lblStaticView
+            // 
+            this.lblStaticView.AutoSize = true;
+            this.lblStaticView.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblStaticView.Location = new System.Drawing.Point(428, 8);
+            this.lblStaticView.Name = "lblStaticView";
+            this.lblStaticView.Size = new System.Drawing.Size(55, 20);
+            this.lblStaticView.TabIndex = 2;
+            this.lblStaticView.Text = "View:";
             // 
             // lblStatus
             // 
@@ -214,34 +242,7 @@
             this.dataGridViewMessages.RowTemplate.Height = 24;
             this.dataGridViewMessages.Size = new System.Drawing.Size(622, 373);
             this.dataGridViewMessages.TabIndex = 2;
-            // 
-            // lblStaticView
-            // 
-            this.lblStaticView.AutoSize = true;
-            this.lblStaticView.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblStaticView.Location = new System.Drawing.Point(428, 8);
-            this.lblStaticView.Name = "lblStaticView";
-            this.lblStaticView.Size = new System.Drawing.Size(55, 20);
-            this.lblStaticView.TabIndex = 2;
-            this.lblStaticView.Text = "View:";
-            // 
-            // cmbDataView
-            // 
-            this.cmbDataView.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.cmbDataView.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cmbDataView.FormattingEnabled = true;
-            this.cmbDataView.ItemHeight = 18;
-            this.cmbDataView.Items.AddRange(new object[] {
-            "All",
-            "Incoming",
-            "Outgoing"});
-            this.cmbDataView.Location = new System.Drawing.Point(489, 6);
-            this.cmbDataView.MaxDropDownItems = 3;
-            this.cmbDataView.Name = "cmbDataView";
-            this.cmbDataView.Size = new System.Drawing.Size(121, 26);
-            this.cmbDataView.TabIndex = 99;
-            this.cmbDataView.TabStop = false;
-            this.cmbDataView.Text = "All";
+            this.dataGridViewMessages.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.DataGridViewMessages_CellContentClick);
             // 
             // columnData
             // 

@@ -107,5 +107,13 @@ namespace ConvocationServer
         {
 
         }
+
+        // DataGridViewMessages Buttons
+        private void DataGridViewMessages_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            DataGridViewCell cell = dataGridViewMessages[e.ColumnIndex, e.RowIndex];
+            FrmMessageData frm = (FrmMessageData)LstForms[1];
+            frm.Show();
+        }
     }
 }
