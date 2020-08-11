@@ -40,6 +40,7 @@ namespace ConvocationServer
             notifyIcon.BalloonTipTitle = "RSL - Server";
             notifyIcon.BalloonTipText = "Double click to open!";
             notifyIcon.BalloonTipIcon = ToolTipIcon.Info;
+            notifyIcon.MouseClick += new MouseEventHandler(delegate (object sender, MouseEventArgs e) { contextMenuStripNotify.Show(Cursor.Position); });
             notifyIcon.Visible = true;
 
             // this.WindowState = FormWindowState.Minimized;
@@ -57,6 +58,7 @@ namespace ConvocationServer
             }
 
             Hide();
+            showToolStripMenuItem.Text = "Show";
             notifyIcon.ShowBalloonTip(1000);
         }
 
@@ -79,19 +81,40 @@ namespace ConvocationServer
             {
                 lbl.ForeColor = System.Drawing.Color.YellowGreen;
                 statusItem.Text = "Stop";
+                connectToolStripMenuItem.Text = "Stop";
             } else
             {
                 lbl.ForeColor = System.Drawing.Color.OrangeRed;
                 statusItem.Text = "Start";
+                connectToolStripMenuItem.Text = "Start";
             }
         }
 
-        private void NotifyIcon_MouseDoubleClick(object sender, MouseEventArgs e)
+        // contextMenuStripNotify Buttons
+        private void ConnectToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            // When the notification icon is double clicked, hide it
-            // ad show the window
-            Show();
-            this.WindowState = FormWindowState.Normal;
+            this.ToggleServer();
+        }
+
+        private void ShowToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (this.showToolStripMenuItem.Text == "Hide")
+            {
+                this.WindowState = FormWindowState.Minimized;
+                this.MinimizeToTray();
+            }
+            else
+            {
+                Show();
+                this.WindowState = FormWindowState.Normal;
+                this.showToolStripMenuItem.Text = "Hide";
+                this.contextMenuStripNotify.Hide();
+            }
+        }
+
+        private void ExitToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.ExitApp();
         }
 
         // File ToolStrip Buttons
@@ -102,32 +125,7 @@ namespace ConvocationServer
 
         private void StatusStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (this.Server.IsConnected)
-            {
-                this.Server.Stop();
-                this.lblStatus.Text = "Stopped";
-            } else
-            {
-                if (this.Server.Start())
-                {
-                    this.lblStatus.Text = "Started";
-                    this.tmrFailedToConnect.Stop();
-                }
-                else
-                {
-                    if (!this.tmrFailedToConnect.Enabled)
-                    {
-                        this.tmrFailedToConnect.Start();
-                    }
-                    else
-                    {
-                        this.tmrFailedToConnect.Stop();
-                        this.tmrFailedToConnect.Start();
-                    }
-
-                    this.lblStatus.Text = "Failed to Start!";
-                }
-            }
+            this.ToggleServer();
         }
 
         private void OnFailedToOpenEvent(Object source, System.Timers.ElapsedEventArgs e)
@@ -148,7 +146,7 @@ namespace ConvocationServer
 
         private void ExitStripMenuItem_Click(object sender, EventArgs e)
         {
-            Application.Exit();
+            this.ExitApp();
         }
 
         private void ManageToolStripMenuItem_Click(object sender, EventArgs e)
@@ -197,6 +195,42 @@ namespace ConvocationServer
                 default: // All
                     this.DataViewFilter(this.dataGridViewMessages, "Direction", "");
                     break;
+            }
+        }
+
+        private void ExitApp()
+        {
+            Application.Exit();
+        }
+
+        private void ToggleServer()
+        {
+            if (this.Server.IsConnected)
+            {
+                this.Server.Stop();
+                this.lblStatus.Text = "Stopped";
+            }
+            else
+            {
+                if (this.Server.Start())
+                {
+                    this.lblStatus.Text = "Started";
+                    this.tmrFailedToConnect.Stop();
+                }
+                else
+                {
+                    if (!this.tmrFailedToConnect.Enabled)
+                    {
+                        this.tmrFailedToConnect.Start();
+                    }
+                    else
+                    {
+                        this.tmrFailedToConnect.Stop();
+                        this.tmrFailedToConnect.Start();
+                    }
+
+                    this.lblStatus.Text = "Failed to Start!";
+                }
             }
         }
 

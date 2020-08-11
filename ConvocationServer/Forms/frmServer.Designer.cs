@@ -33,6 +33,7 @@
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             this.notifyIcon = new System.Windows.Forms.NotifyIcon(this.components);
+            this.contextMenuStripNotify = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.menuStripServer = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.settingsStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -50,6 +51,11 @@
             this.lblStatus = new System.Windows.Forms.Label();
             this.lblStaticStatus = new System.Windows.Forms.Label();
             this.dataGridViewMessages = new System.Windows.Forms.DataGridView();
+            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.connectToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.showToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.contextMenuStripNotify.SuspendLayout();
             this.menuStripServer.SuspendLayout();
             this.panelBottom.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewMessages)).BeginInit();
@@ -60,9 +66,20 @@
             this.notifyIcon.BalloonTipIcon = System.Windows.Forms.ToolTipIcon.Info;
             this.notifyIcon.BalloonTipText = "Double Click to re-open";
             this.notifyIcon.BalloonTipTitle = "RSL";
+            this.notifyIcon.ContextMenuStrip = this.contextMenuStripNotify;
             this.notifyIcon.Icon = ((System.Drawing.Icon)(resources.GetObject("notifyIcon.Icon")));
             this.notifyIcon.Text = "RSL - Server";
-            this.notifyIcon.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.NotifyIcon_MouseDoubleClick);
+            // 
+            // contextMenuStripNotify
+            // 
+            this.contextMenuStripNotify.ForeColor = System.Drawing.Color.Black;
+            this.contextMenuStripNotify.ImageScalingSize = new System.Drawing.Size(20, 20);
+            this.contextMenuStripNotify.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.connectToolStripMenuItem,
+            this.showToolStripMenuItem,
+            this.exitToolStripMenuItem});
+            this.contextMenuStripNotify.Name = "contextMenuStripNotify";
+            this.contextMenuStripNotify.Size = new System.Drawing.Size(211, 104);
             // 
             // menuStripServer
             // 
@@ -88,26 +105,26 @@
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
             this.fileToolStripMenuItem.Size = new System.Drawing.Size(46, 24);
             this.fileToolStripMenuItem.Text = "File";
-            this.fileToolStripMenuItem.ToolTipText = "FIle";
+            this.fileToolStripMenuItem.ToolTipText = "File";
             // 
             // settingsStripMenuItem
             // 
             this.settingsStripMenuItem.Name = "settingsStripMenuItem";
-            this.settingsStripMenuItem.Size = new System.Drawing.Size(146, 26);
+            this.settingsStripMenuItem.Size = new System.Drawing.Size(224, 26);
             this.settingsStripMenuItem.Text = "Settings";
             this.settingsStripMenuItem.Click += new System.EventHandler(this.SettingsStripMenuItem_Click);
             // 
             // statusStripMenuItem
             // 
             this.statusStripMenuItem.Name = "statusStripMenuItem";
-            this.statusStripMenuItem.Size = new System.Drawing.Size(146, 26);
+            this.statusStripMenuItem.Size = new System.Drawing.Size(224, 26);
             this.statusStripMenuItem.Text = "Connect";
             this.statusStripMenuItem.Click += new System.EventHandler(this.StatusStripMenuItem_Click);
             // 
             // hideWindowStripMenuItem
             // 
             this.hideWindowStripMenuItem.Name = "hideWindowStripMenuItem";
-            this.hideWindowStripMenuItem.Size = new System.Drawing.Size(146, 26);
+            this.hideWindowStripMenuItem.Size = new System.Drawing.Size(224, 26);
             this.hideWindowStripMenuItem.Text = "Hide";
             this.hideWindowStripMenuItem.ToolTipText = "Hide Window";
             this.hideWindowStripMenuItem.Click += new System.EventHandler(this.HideWindowStripMenuItem_Click);
@@ -115,7 +132,7 @@
             // exitStripMenuItem
             // 
             this.exitStripMenuItem.Name = "exitStripMenuItem";
-            this.exitStripMenuItem.Size = new System.Drawing.Size(146, 26);
+            this.exitStripMenuItem.Size = new System.Drawing.Size(224, 26);
             this.exitStripMenuItem.Text = "Exit";
             this.exitStripMenuItem.Click += new System.EventHandler(this.ExitStripMenuItem_Click);
             // 
@@ -233,7 +250,7 @@
             dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Window;
             dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle1.ForeColor = System.Drawing.Color.Black;
+            dataGridViewCellStyle1.ForeColor = System.Drawing.Color.WhiteSmoke;
             dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
             dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
             dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
@@ -253,6 +270,32 @@
             this.dataGridViewMessages.Size = new System.Drawing.Size(622, 373);
             this.dataGridViewMessages.TabIndex = 2;
             this.dataGridViewMessages.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.DataGridViewMessages_CellContentClick);
+            // 
+            // toolStripMenuItem1
+            // 
+            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(32, 19);
+            // 
+            // connectToolStripMenuItem
+            // 
+            this.connectToolStripMenuItem.Name = "connectToolStripMenuItem";
+            this.connectToolStripMenuItem.Size = new System.Drawing.Size(210, 24);
+            this.connectToolStripMenuItem.Text = "Connect";
+            this.connectToolStripMenuItem.Click += new System.EventHandler(this.ConnectToolStripMenuItem_Click);
+            // 
+            // showToolStripMenuItem
+            // 
+            this.showToolStripMenuItem.Name = "showToolStripMenuItem";
+            this.showToolStripMenuItem.Size = new System.Drawing.Size(210, 24);
+            this.showToolStripMenuItem.Text = "Show";
+            this.showToolStripMenuItem.Click += new System.EventHandler(this.ShowToolStripMenuItem_Click);
+            // 
+            // exitToolStripMenuItem
+            // 
+            this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(210, 24);
+            this.exitToolStripMenuItem.Text = "Exit";
+            this.exitToolStripMenuItem.Click += new System.EventHandler(this.ExitToolStripMenuItem_Click);
             // 
             // FrmServer
             // 
@@ -274,6 +317,7 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "RSL - Server";
             this.Resize += new System.EventHandler(this.FrmServer_Resize);
+            this.contextMenuStripNotify.ResumeLayout(false);
             this.menuStripServer.ResumeLayout(false);
             this.menuStripServer.PerformLayout();
             this.panelBottom.ResumeLayout(false);
@@ -303,6 +347,11 @@
         private System.Windows.Forms.DataGridView dataGridViewMessages;
         private System.Windows.Forms.ComboBox cmbDataView;
         private System.Windows.Forms.Label lblStaticView;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStripNotify;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem connectToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem showToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
     }
 }
 
