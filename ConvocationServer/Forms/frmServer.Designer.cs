@@ -33,7 +33,10 @@
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             this.notifyIcon = new System.Windows.Forms.NotifyIcon(this.components);
-            this.contextMenuStripNotify = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.ctxMenuStripNotify = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.connectToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.showToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStripServer = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.settingsStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -46,19 +49,21 @@
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.infoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panelBottom = new System.Windows.Forms.Panel();
+            this.panViewDock = new System.Windows.Forms.Panel();
             this.cmbDataView = new System.Windows.Forms.ComboBox();
             this.lblStaticView = new System.Windows.Forms.Label();
             this.lblStatus = new System.Windows.Forms.Label();
             this.lblStaticStatus = new System.Windows.Forms.Label();
-            this.dataGridViewMessages = new System.Windows.Forms.DataGridView();
+            this.dgvMessages = new System.Windows.Forms.DataGridView();
+            this.ctxMenuStripMessageData = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.toolStripMenuItemDetailedView = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
-            this.connectToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.showToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.contextMenuStripNotify.SuspendLayout();
+            this.ctxMenuStripNotify.SuspendLayout();
             this.menuStripServer.SuspendLayout();
             this.panelBottom.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewMessages)).BeginInit();
+            this.panViewDock.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvMessages)).BeginInit();
+            this.ctxMenuStripMessageData.SuspendLayout();
             this.SuspendLayout();
             // 
             // notifyIcon
@@ -66,20 +71,41 @@
             this.notifyIcon.BalloonTipIcon = System.Windows.Forms.ToolTipIcon.Info;
             this.notifyIcon.BalloonTipText = "Double Click to re-open";
             this.notifyIcon.BalloonTipTitle = "RSL";
-            this.notifyIcon.ContextMenuStrip = this.contextMenuStripNotify;
+            this.notifyIcon.ContextMenuStrip = this.ctxMenuStripNotify;
             this.notifyIcon.Icon = ((System.Drawing.Icon)(resources.GetObject("notifyIcon.Icon")));
             this.notifyIcon.Text = "RSL - Server";
             // 
-            // contextMenuStripNotify
+            // ctxMenuStripNotify
             // 
-            this.contextMenuStripNotify.ForeColor = System.Drawing.Color.Black;
-            this.contextMenuStripNotify.ImageScalingSize = new System.Drawing.Size(20, 20);
-            this.contextMenuStripNotify.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.ctxMenuStripNotify.ForeColor = System.Drawing.Color.Black;
+            this.ctxMenuStripNotify.ImageScalingSize = new System.Drawing.Size(20, 20);
+            this.ctxMenuStripNotify.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.connectToolStripMenuItem,
             this.showToolStripMenuItem,
             this.exitToolStripMenuItem});
-            this.contextMenuStripNotify.Name = "contextMenuStripNotify";
-            this.contextMenuStripNotify.Size = new System.Drawing.Size(211, 104);
+            this.ctxMenuStripNotify.Name = "ctxMenuStripNotify";
+            this.ctxMenuStripNotify.Size = new System.Drawing.Size(133, 76);
+            // 
+            // connectToolStripMenuItem
+            // 
+            this.connectToolStripMenuItem.Name = "connectToolStripMenuItem";
+            this.connectToolStripMenuItem.Size = new System.Drawing.Size(132, 24);
+            this.connectToolStripMenuItem.Text = "Connect";
+            this.connectToolStripMenuItem.Click += new System.EventHandler(this.ConnectToolStripMenuItem_Click);
+            // 
+            // showToolStripMenuItem
+            // 
+            this.showToolStripMenuItem.Name = "showToolStripMenuItem";
+            this.showToolStripMenuItem.Size = new System.Drawing.Size(132, 24);
+            this.showToolStripMenuItem.Text = "Show";
+            this.showToolStripMenuItem.Click += new System.EventHandler(this.ShowToolStripMenuItem_Click);
+            // 
+            // exitToolStripMenuItem
+            // 
+            this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(132, 24);
+            this.exitToolStripMenuItem.Text = "Exit";
+            this.exitToolStripMenuItem.Click += new System.EventHandler(this.ExitToolStripMenuItem_Click);
             // 
             // menuStripServer
             // 
@@ -110,21 +136,21 @@
             // settingsStripMenuItem
             // 
             this.settingsStripMenuItem.Name = "settingsStripMenuItem";
-            this.settingsStripMenuItem.Size = new System.Drawing.Size(224, 26);
+            this.settingsStripMenuItem.Size = new System.Drawing.Size(146, 26);
             this.settingsStripMenuItem.Text = "Settings";
             this.settingsStripMenuItem.Click += new System.EventHandler(this.SettingsStripMenuItem_Click);
             // 
             // statusStripMenuItem
             // 
             this.statusStripMenuItem.Name = "statusStripMenuItem";
-            this.statusStripMenuItem.Size = new System.Drawing.Size(224, 26);
+            this.statusStripMenuItem.Size = new System.Drawing.Size(146, 26);
             this.statusStripMenuItem.Text = "Connect";
             this.statusStripMenuItem.Click += new System.EventHandler(this.StatusStripMenuItem_Click);
             // 
             // hideWindowStripMenuItem
             // 
             this.hideWindowStripMenuItem.Name = "hideWindowStripMenuItem";
-            this.hideWindowStripMenuItem.Size = new System.Drawing.Size(224, 26);
+            this.hideWindowStripMenuItem.Size = new System.Drawing.Size(146, 26);
             this.hideWindowStripMenuItem.Text = "Hide";
             this.hideWindowStripMenuItem.ToolTipText = "Hide Window";
             this.hideWindowStripMenuItem.Click += new System.EventHandler(this.HideWindowStripMenuItem_Click);
@@ -132,7 +158,7 @@
             // exitStripMenuItem
             // 
             this.exitStripMenuItem.Name = "exitStripMenuItem";
-            this.exitStripMenuItem.Size = new System.Drawing.Size(224, 26);
+            this.exitStripMenuItem.Size = new System.Drawing.Size(146, 26);
             this.exitStripMenuItem.Text = "Exit";
             this.exitStripMenuItem.Click += new System.EventHandler(this.ExitStripMenuItem_Click);
             // 
@@ -178,8 +204,7 @@
             // 
             // panelBottom
             // 
-            this.panelBottom.Controls.Add(this.cmbDataView);
-            this.panelBottom.Controls.Add(this.lblStaticView);
+            this.panelBottom.Controls.Add(this.panViewDock);
             this.panelBottom.Controls.Add(this.lblStatus);
             this.panelBottom.Controls.Add(this.lblStaticStatus);
             this.panelBottom.Dock = System.Windows.Forms.DockStyle.Bottom;
@@ -187,6 +212,17 @@
             this.panelBottom.Name = "panelBottom";
             this.panelBottom.Size = new System.Drawing.Size(622, 40);
             this.panelBottom.TabIndex = 1;
+            // 
+            // panViewDock
+            // 
+            this.panViewDock.BackColor = System.Drawing.Color.Transparent;
+            this.panViewDock.Controls.Add(this.cmbDataView);
+            this.panViewDock.Controls.Add(this.lblStaticView);
+            this.panViewDock.Dock = System.Windows.Forms.DockStyle.Right;
+            this.panViewDock.Location = new System.Drawing.Point(418, 0);
+            this.panViewDock.Name = "panViewDock";
+            this.panViewDock.Size = new System.Drawing.Size(204, 40);
+            this.panViewDock.TabIndex = 2;
             // 
             // cmbDataView
             // 
@@ -198,11 +234,11 @@
             "All",
             "Incoming",
             "Outgoing"});
-            this.cmbDataView.Location = new System.Drawing.Point(489, 6);
+            this.cmbDataView.Location = new System.Drawing.Point(64, 4);
             this.cmbDataView.MaxDropDownItems = 3;
             this.cmbDataView.Name = "cmbDataView";
             this.cmbDataView.Size = new System.Drawing.Size(121, 26);
-            this.cmbDataView.TabIndex = 99;
+            this.cmbDataView.TabIndex = 101;
             this.cmbDataView.TabStop = false;
             this.cmbDataView.Text = "All";
             this.cmbDataView.SelectedIndexChanged += new System.EventHandler(this.CmbDataView_SelectedIndexChanged);
@@ -211,10 +247,10 @@
             // 
             this.lblStaticView.AutoSize = true;
             this.lblStaticView.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblStaticView.Location = new System.Drawing.Point(428, 8);
+            this.lblStaticView.Location = new System.Drawing.Point(3, 6);
             this.lblStaticView.Name = "lblStaticView";
             this.lblStaticView.Size = new System.Drawing.Size(55, 20);
-            this.lblStaticView.TabIndex = 2;
+            this.lblStaticView.TabIndex = 100;
             this.lblStaticView.Text = "View:";
             // 
             // lblStatus
@@ -239,14 +275,14 @@
             this.lblStaticStatus.TabIndex = 0;
             this.lblStaticStatus.Text = "Server Status:";
             // 
-            // dataGridViewMessages
+            // dgvMessages
             // 
-            this.dataGridViewMessages.AllowUserToAddRows = false;
-            this.dataGridViewMessages.AllowUserToDeleteRows = false;
-            this.dataGridViewMessages.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.dataGridViewMessages.BackgroundColor = System.Drawing.Color.DimGray;
-            this.dataGridViewMessages.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.dataGridViewMessages.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvMessages.AllowUserToAddRows = false;
+            this.dgvMessages.AllowUserToDeleteRows = false;
+            this.dgvMessages.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dgvMessages.BackgroundColor = System.Drawing.Color.DimGray;
+            this.dgvMessages.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.dgvMessages.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Window;
             dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -254,48 +290,43 @@
             dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
             dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
             dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dataGridViewMessages.DefaultCellStyle = dataGridViewCellStyle1;
-            this.dataGridViewMessages.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dataGridViewMessages.Location = new System.Drawing.Point(0, 28);
-            this.dataGridViewMessages.MultiSelect = false;
-            this.dataGridViewMessages.Name = "dataGridViewMessages";
-            this.dataGridViewMessages.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.dataGridViewMessages.RowHeadersWidth = 51;
+            this.dgvMessages.DefaultCellStyle = dataGridViewCellStyle1;
+            this.dgvMessages.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dgvMessages.Location = new System.Drawing.Point(0, 28);
+            this.dgvMessages.MultiSelect = false;
+            this.dgvMessages.Name = "dgvMessages";
+            this.dgvMessages.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.dgvMessages.RowHeadersWidth = 51;
             dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Control;
             dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText;
             dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
             dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            this.dataGridViewMessages.RowsDefaultCellStyle = dataGridViewCellStyle2;
-            this.dataGridViewMessages.RowTemplate.Height = 24;
-            this.dataGridViewMessages.Size = new System.Drawing.Size(622, 373);
-            this.dataGridViewMessages.TabIndex = 2;
-            this.dataGridViewMessages.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.DataGridViewMessages_CellContentClick);
+            this.dgvMessages.RowsDefaultCellStyle = dataGridViewCellStyle2;
+            this.dgvMessages.RowTemplate.ContextMenuStrip = this.ctxMenuStripMessageData;
+            this.dgvMessages.RowTemplate.Height = 24;
+            this.dgvMessages.Size = new System.Drawing.Size(622, 373);
+            this.dgvMessages.TabIndex = 2;
+            this.dgvMessages.CellContextMenuStripNeeded += new System.Windows.Forms.DataGridViewCellContextMenuStripNeededEventHandler(this.DgvMessages_CellContextMenuStripNeeded);
+            // 
+            // ctxMenuStripMessageData
+            // 
+            this.ctxMenuStripMessageData.ImageScalingSize = new System.Drawing.Size(20, 20);
+            this.ctxMenuStripMessageData.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripMenuItemDetailedView});
+            this.ctxMenuStripMessageData.Name = "ctxMenuStripMessageData";
+            this.ctxMenuStripMessageData.Size = new System.Drawing.Size(211, 56);
+            // 
+            // toolStripMenuItemDetailedView
+            // 
+            this.toolStripMenuItemDetailedView.Name = "toolStripMenuItemDetailedView";
+            this.toolStripMenuItemDetailedView.Size = new System.Drawing.Size(210, 24);
+            this.toolStripMenuItemDetailedView.Text = "Detailed View";
+            this.toolStripMenuItemDetailedView.Click += new System.EventHandler(this.ToolStripMenuItemDetailedView_Click);
             // 
             // toolStripMenuItem1
             // 
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
             this.toolStripMenuItem1.Size = new System.Drawing.Size(32, 19);
-            // 
-            // connectToolStripMenuItem
-            // 
-            this.connectToolStripMenuItem.Name = "connectToolStripMenuItem";
-            this.connectToolStripMenuItem.Size = new System.Drawing.Size(210, 24);
-            this.connectToolStripMenuItem.Text = "Connect";
-            this.connectToolStripMenuItem.Click += new System.EventHandler(this.ConnectToolStripMenuItem_Click);
-            // 
-            // showToolStripMenuItem
-            // 
-            this.showToolStripMenuItem.Name = "showToolStripMenuItem";
-            this.showToolStripMenuItem.Size = new System.Drawing.Size(210, 24);
-            this.showToolStripMenuItem.Text = "Show";
-            this.showToolStripMenuItem.Click += new System.EventHandler(this.ShowToolStripMenuItem_Click);
-            // 
-            // exitToolStripMenuItem
-            // 
-            this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(210, 24);
-            this.exitToolStripMenuItem.Text = "Exit";
-            this.exitToolStripMenuItem.Click += new System.EventHandler(this.ExitToolStripMenuItem_Click);
             // 
             // FrmServer
             // 
@@ -303,7 +334,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.DimGray;
             this.ClientSize = new System.Drawing.Size(622, 441);
-            this.Controls.Add(this.dataGridViewMessages);
+            this.Controls.Add(this.dgvMessages);
             this.Controls.Add(this.panelBottom);
             this.Controls.Add(this.menuStripServer);
             this.ForeColor = System.Drawing.Color.WhiteSmoke;
@@ -317,12 +348,15 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "RSL - Server";
             this.Resize += new System.EventHandler(this.FrmServer_Resize);
-            this.contextMenuStripNotify.ResumeLayout(false);
+            this.ctxMenuStripNotify.ResumeLayout(false);
             this.menuStripServer.ResumeLayout(false);
             this.menuStripServer.PerformLayout();
             this.panelBottom.ResumeLayout(false);
             this.panelBottom.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewMessages)).EndInit();
+            this.panViewDock.ResumeLayout(false);
+            this.panViewDock.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvMessages)).EndInit();
+            this.ctxMenuStripMessageData.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -344,14 +378,17 @@
         private System.Windows.Forms.Label lblStaticStatus;
         private System.Windows.Forms.ToolStripMenuItem settingsStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem infoToolStripMenuItem;
-        private System.Windows.Forms.DataGridView dataGridViewMessages;
-        private System.Windows.Forms.ComboBox cmbDataView;
-        private System.Windows.Forms.Label lblStaticView;
-        private System.Windows.Forms.ContextMenuStrip contextMenuStripNotify;
+        private System.Windows.Forms.DataGridView dgvMessages;
+        private System.Windows.Forms.ContextMenuStrip ctxMenuStripNotify;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem connectToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem showToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
+        private System.Windows.Forms.Panel panViewDock;
+        private System.Windows.Forms.ComboBox cmbDataView;
+        private System.Windows.Forms.Label lblStaticView;
+        private System.Windows.Forms.ContextMenuStrip ctxMenuStripMessageData;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemDetailedView;
     }
 }
 

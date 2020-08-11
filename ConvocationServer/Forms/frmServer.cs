@@ -35,12 +35,11 @@ namespace ConvocationServer
             this.TblMessages.Columns.Add("Data", typeof(string));
             this.TblMessages.Columns.Add("Direction", typeof(string));
             this.TblMessages.Columns.Add("Timestamp", typeof(string));
-            this.dataGridViewMessages.DataSource = this.TblMessages;
+            this.dgvMessages.DataSource = this.TblMessages;
 
             notifyIcon.BalloonTipTitle = "RSL - Server";
             notifyIcon.BalloonTipText = "Double click to open!";
             notifyIcon.BalloonTipIcon = ToolTipIcon.Info;
-            notifyIcon.MouseClick += new MouseEventHandler(delegate (object sender, MouseEventArgs e) { contextMenuStripNotify.Show(Cursor.Position); });
             notifyIcon.Visible = true;
 
             // this.WindowState = FormWindowState.Minimized;
@@ -90,7 +89,7 @@ namespace ConvocationServer
             }
         }
 
-        // contextMenuStripNotify Buttons
+        // ctxMenuStripNotify Buttons
         private void ConnectToolStripMenuItem_Click(object sender, EventArgs e)
         {
             this.ToggleServer();
@@ -108,7 +107,7 @@ namespace ConvocationServer
                 Show();
                 this.WindowState = FormWindowState.Normal;
                 this.showToolStripMenuItem.Text = "Hide";
-                this.contextMenuStripNotify.Hide();
+                this.ctxMenuStripNotify.Hide();
             }
         }
 
@@ -149,12 +148,12 @@ namespace ConvocationServer
             this.ExitApp();
         }
 
+        // User ToolStrip Buttons
         private void ManageToolStripMenuItem_Click(object sender, EventArgs e)
         {
 
         }
 
-        // User ToolStrip Buttons
         private void AddNewToolStripMenuItem_Click(object sender, EventArgs e)
         {
 
@@ -165,18 +164,10 @@ namespace ConvocationServer
         {
 
         }
-
-        // DataGridViewMessages Buttons
-        private void DataGridViewMessages_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        
+        private void FrmServer_Click(object sender, EventArgs e)
         {
-            DataGridViewRow row = this.dataGridViewMessages.Rows[e.RowIndex];
-            FrmMessageData frm = (FrmMessageData)LstForms[1];
-            frm.SetData(
-                row.Cells[0].Value.ToString(), 
-                row.Cells[1].Value.ToString(), 
-                row.Cells[2].Value.ToString()
-            );
-            frm.Show();
+            throw new NotImplementedException();
         }
 
         private void CmbDataView_SelectedIndexChanged(object sender, EventArgs e)
@@ -184,22 +175,23 @@ namespace ConvocationServer
            switch(this.cmbDataView.SelectedIndex)
             {
                 case 0: // All
-                    this.DataViewFilter(this.dataGridViewMessages, "Direction", "");
+                    this.DataViewFilter(this.dgvMessages, "Direction", "");
                     break;
                 case 1: // Incoming
-                    this.DataViewFilter(this.dataGridViewMessages, "Direction", "Incoming");
+                    this.DataViewFilter(this.dgvMessages, "Direction", "Incoming");
                     break;
                 case 2: // Outgoing
-                    this.DataViewFilter(this.dataGridViewMessages, "Direction", "Outgoing");
+                    this.DataViewFilter(this.dgvMessages, "Direction", "Outgoing");
                     break;
                 default: // All
-                    this.DataViewFilter(this.dataGridViewMessages, "Direction", "");
+                    this.DataViewFilter(this.dgvMessages, "Direction", "");
                     break;
             }
         }
 
         private void ExitApp()
         {
+            this.notifyIcon.Visible = false;
             Application.Exit();
         }
 
@@ -262,6 +254,38 @@ namespace ConvocationServer
             currencyManager1.ResumeBinding();
 
             return dgv;
+        }
+
+        private void DgvMessages_CellContextMenuStripNeeded(object sender, DataGridViewCellContextMenuStripNeededEventArgs e)
+        {
+            dgvMessages.ClearSelection();
+            int rowSelected = e.RowIndex;
+            if (e.RowIndex != -1)
+            {
+                this.dgvMessages.Rows[rowSelected].Selected = true;
+            }
+            e.ContextMenuStrip = ctxMenuStripMessageData;
+        }
+
+        private void ToolStripMenuItemDetailedView_Click(object sender, EventArgs e)
+        {
+            if (this.dgvMessages.SelectedRows.Count == 0) return;
+
+            DataGridViewRow row = this.dgvMessages.SelectedRows[0];
+            FrmMessageData frm = (FrmMessageData)LstForms[1];
+
+            if (frm == null || row.Cells.Count != 3) return;
+
+            object message = row.Cells[0].Value;
+            object direction = row.Cells[1].Value;
+            object timestamp = row.Cells[2].Value;
+            frm.SetData(
+                message?.ToString(),
+                direction?.ToString(),
+                timestamp?.ToString()
+            );
+            frm.Show();
+            frm.BringToFront();
         }
     }
 }
