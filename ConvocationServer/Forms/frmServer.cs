@@ -40,6 +40,7 @@ namespace ConvocationServer
             notifyIcon.BalloonTipTitle = "RSL - Server";
             notifyIcon.BalloonTipText = "Double click to open!";
             notifyIcon.BalloonTipIcon = ToolTipIcon.Info;
+            notifyIcon.Visible = true;
 
             // this.WindowState = FormWindowState.Minimized;
             // this.MinimizeToTray();
@@ -56,7 +57,6 @@ namespace ConvocationServer
             }
 
             Hide();
-            notifyIcon.Visible = true;
             notifyIcon.ShowBalloonTip(1000);
         }
 
@@ -92,7 +92,6 @@ namespace ConvocationServer
             // ad show the window
             Show();
             this.WindowState = FormWindowState.Normal;
-            notifyIcon.Visible = false;
         }
 
         // File ToolStrip Buttons
