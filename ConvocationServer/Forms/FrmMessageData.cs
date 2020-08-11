@@ -17,11 +17,11 @@ namespace ConvocationServer.Forms
             InitializeComponent();
         }
 
-        public void SetData(string message = "", string timestamp = "Unknown", string direction = "Unknown")
+        public void SetData(string message = "", string direction = "Unknown", string timestamp = "Unknown")
         {
             this.txtMessage.Text = message;
-            this.txtTimestamp.Text = timestamp;
             this.txtDirection.Text = direction;
+            this.txtTimestamp.Text = timestamp;
         }
 
         private void BtnClose_Click(object sender, EventArgs e)

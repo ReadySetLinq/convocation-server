@@ -30,6 +30,8 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmServer));
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             this.notifyIcon = new System.Windows.Forms.NotifyIcon(this.components);
             this.menuStripServer = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -48,9 +50,6 @@
             this.lblStatus = new System.Windows.Forms.Label();
             this.lblStaticStatus = new System.Windows.Forms.Label();
             this.dataGridViewMessages = new System.Windows.Forms.DataGridView();
-            this.columnData = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.columnDirection = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.columnTimestamp = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.menuStripServer.SuspendLayout();
             this.panelBottom.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewMessages)).BeginInit();
@@ -189,6 +188,7 @@
             this.cmbDataView.TabIndex = 99;
             this.cmbDataView.TabStop = false;
             this.cmbDataView.Text = "All";
+            this.cmbDataView.SelectedIndexChanged += new System.EventHandler(this.CmbDataView_SelectedIndexChanged);
             // 
             // lblStaticView
             // 
@@ -230,47 +230,29 @@
             this.dataGridViewMessages.BackgroundColor = System.Drawing.Color.DimGray;
             this.dataGridViewMessages.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.dataGridViewMessages.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridViewMessages.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.columnData,
-            this.columnDirection,
-            this.columnTimestamp});
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle1.ForeColor = System.Drawing.Color.Black;
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dataGridViewMessages.DefaultCellStyle = dataGridViewCellStyle1;
             this.dataGridViewMessages.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataGridViewMessages.Location = new System.Drawing.Point(0, 28);
             this.dataGridViewMessages.MultiSelect = false;
             this.dataGridViewMessages.Name = "dataGridViewMessages";
             this.dataGridViewMessages.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.dataGridViewMessages.RowHeadersWidth = 51;
+            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            this.dataGridViewMessages.RowsDefaultCellStyle = dataGridViewCellStyle2;
             this.dataGridViewMessages.RowTemplate.Height = 24;
             this.dataGridViewMessages.Size = new System.Drawing.Size(622, 373);
             this.dataGridViewMessages.TabIndex = 2;
             this.dataGridViewMessages.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.DataGridViewMessages_CellContentClick);
-            // 
-            // columnData
-            // 
-            this.columnData.FillWeight = 152.1073F;
-            this.columnData.HeaderText = "Data";
-            this.columnData.MinimumWidth = 6;
-            this.columnData.Name = "columnData";
-            this.columnData.ReadOnly = true;
-            this.columnData.ToolTipText = "Message Data";
-            // 
-            // columnDirection
-            // 
-            this.columnDirection.FillWeight = 56.14973F;
-            this.columnDirection.HeaderText = "Direction";
-            this.columnDirection.MinimumWidth = 6;
-            this.columnDirection.Name = "columnDirection";
-            this.columnDirection.ReadOnly = true;
-            this.columnDirection.ToolTipText = "Incoming/Outgoing";
-            // 
-            // columnTimestamp
-            // 
-            this.columnTimestamp.FillWeight = 91.74297F;
-            this.columnTimestamp.HeaderText = "Timestamp";
-            this.columnTimestamp.MinimumWidth = 6;
-            this.columnTimestamp.Name = "columnTimestamp";
-            this.columnTimestamp.ReadOnly = true;
-            this.columnTimestamp.ToolTipText = "When the message happened";
             // 
             // FrmServer
             // 
@@ -321,9 +303,6 @@
         private System.Windows.Forms.DataGridView dataGridViewMessages;
         private System.Windows.Forms.ComboBox cmbDataView;
         private System.Windows.Forms.Label lblStaticView;
-        private System.Windows.Forms.DataGridViewTextBoxColumn columnData;
-        private System.Windows.Forms.DataGridViewTextBoxColumn columnDirection;
-        private System.Windows.Forms.DataGridViewTextBoxColumn columnTimestamp;
     }
 }
 

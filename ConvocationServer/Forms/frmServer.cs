@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Windows.Forms;
 using ConvocationServer.Forms;
 using ConvocationServer.Sockets;
@@ -15,6 +16,7 @@ namespace ConvocationServer
            // MessageData = Index 1
            new FrmMessageData()
         };
+        private DataTable TblMessages = new DataTable();
         private readonly SocketServer Server = new SocketServer();
         private readonly System.Timers.Timer tmrFailedToConnect = new System.Timers.Timer
         {
@@ -30,6 +32,10 @@ namespace ConvocationServer
             this.Text += " v" + Application.ProductVersion;
             this.lblStatus.Text = "Stopped";
             this.tmrFailedToConnect.Elapsed += this.OnFailedToOpenEvent;
+            this.TblMessages.Columns.Add("Data", typeof(string));
+            this.TblMessages.Columns.Add("Direction", typeof(string));
+            this.TblMessages.Columns.Add("Timestamp", typeof(string));
+            this.dataGridViewMessages.DataSource = this.TblMessages;
 
             notifyIcon.BalloonTipTitle = "RSL - Server";
             notifyIcon.BalloonTipText = "Double click to open!";
@@ -166,9 +172,63 @@ namespace ConvocationServer
         // DataGridViewMessages Buttons
         private void DataGridViewMessages_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
-            DataGridViewCell cell = dataGridViewMessages[e.ColumnIndex, e.RowIndex];
+            DataGridViewRow row = this.dataGridViewMessages.Rows[e.RowIndex];
             FrmMessageData frm = (FrmMessageData)LstForms[1];
+            frm.SetData(
+                row.Cells[0].Value.ToString(), 
+                row.Cells[1].Value.ToString(), 
+                row.Cells[2].Value.ToString()
+            );
             frm.Show();
+        }
+
+        private void CmbDataView_SelectedIndexChanged(object sender, EventArgs e)
+        {
+           switch(this.cmbDataView.SelectedIndex)
+            {
+                case 0: // All
+                    this.DataViewFilter(this.dataGridViewMessages, "Direction", "");
+                    break;
+                case 1: // Incoming
+                    this.DataViewFilter(this.dataGridViewMessages, "Direction", "Incoming");
+                    break;
+                case 2: // Outgoing
+                    this.DataViewFilter(this.dataGridViewMessages, "Direction", "Outgoing");
+                    break;
+                default: // All
+                    this.DataViewFilter(this.dataGridViewMessages, "Direction", "");
+                    break;
+            }
+        }
+
+        private DataGridView DataViewFilter(DataGridView dgv, string cell, string filter)
+        {
+            // Turn the filter lowercase and trim it once to use later
+            string key = filter.ToLower().Trim();
+
+            CurrencyManager currencyManager1 = (CurrencyManager)BindingContext[dgv.DataSource];
+            currencyManager1.SuspendBinding();
+            foreach (DataGridViewRow row in dgv.Rows)
+            {
+                // Skip null rows
+                if (row == null) continue;
+
+                // No filter was given, so all rows should be made visible
+                if (filter == "")
+                    row.Visible = true;
+                else
+                {
+                    // If the value does not match, hide the layer
+                    // otherwise show it
+                    if (row.Cells[cell].Value.ToString().ToLower().Trim() != key)
+                        row.Visible = false;
+                    else
+                        row.Visible = true;
+                }
+            }
+            currencyManager1.ResumeBinding();
+
+            return dgv;
         }
     }
 }
