@@ -10,6 +10,8 @@ namespace ConvocationServer.Storage
 {
     class AppSettings
     {
+        private readonly string _defaultIpAddress = Dns.GetHostEntry(Dns.GetHostName()).AddressList[1].ToString();
+
         public string IPAddress { get; set; }
         public int Port { get; set; }
         public List<Account> Accounts { get; set; }
@@ -17,9 +19,20 @@ namespace ConvocationServer.Storage
         public AppSettings()
         {
             // Set Defaults
-            IPAddress = Dns.GetHostEntry(Dns.GetHostName()).AddressList[1].ToString();
+            IPAddress = _defaultIpAddress;
             Port = 8181;
             Accounts = new List<Account>();
+        }
+
+        public string SetIPAddress(string address)
+        {
+            string _address = address.Trim();
+
+            // If IPAddress is empty, reset to default
+            if (_address.Length == 0) IPAddress = _defaultIpAddress;
+            else IPAddress = _address;
+
+            return IPAddress;
         }
 
     }
@@ -29,7 +42,7 @@ namespace ConvocationServer.Storage
         private AppSettings appSettings;
         private readonly string fileName;
 
-        public string IPAddress { get => appSettings.IPAddress; set => appSettings.IPAddress = value; }
+        public string IPAddress { get => appSettings.IPAddress; set => appSettings.SetIPAddress(appSettings.IPAddress = value); }
         public int Port { get => appSettings.Port; set => appSettings.Port = value; }
         public List<Account> Accounts { get => appSettings.Accounts; set => appSettings.Accounts = value; }
 
@@ -44,8 +57,9 @@ namespace ConvocationServer.Storage
         {
             try
             {
-                string jsonString = File.ReadAllText(fileName);
-                appSettings = JsonSerializer.Deserialize<AppSettings>(jsonString);
+                // Get all text from our file, Base64 decode it to it's JSON string
+                // Then deseralize that JSON string into an AppSettings object
+                appSettings = JsonSerializer.Deserialize<AppSettings>(File.ReadAllText(fileName).Base64Decode());
             }
             catch
             {
@@ -56,9 +70,8 @@ namespace ConvocationServer.Storage
         public void Save()
         {
             // Seralize appSettings class into JSON string
-            string jsonString = JsonSerializer.Serialize(appSettings);
-            // Write data to our file
-            File.WriteAllText(fileName, jsonString);
+            // Then Base64 encode that string an save it to our file
+            File.WriteAllText(fileName, JsonSerializer.Serialize(appSettings).Base64Encode());
         }
 
         public bool AddAccount(string userName, string password)
