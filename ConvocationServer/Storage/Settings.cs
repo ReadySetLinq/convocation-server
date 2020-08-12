@@ -42,8 +42,15 @@ namespace ConvocationServer.Storage
 
         public void Load()
         {
-           string jsonString = File.ReadAllText(fileName);
-           appSettings = JsonSerializer.Deserialize<AppSettings>(jsonString);
+            try
+            {
+                string jsonString = File.ReadAllText(fileName);
+                appSettings = JsonSerializer.Deserialize<AppSettings>(jsonString);
+            }
+            catch
+            {
+                appSettings = new AppSettings();
+            }
         }
 
         public void Save()
