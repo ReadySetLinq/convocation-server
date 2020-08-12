@@ -3,6 +3,7 @@ using Newtonsoft.Json.Linq;
 using NUnit.Framework;
 using System;
 using System.Linq;
+using System.Text;
 
 namespace ConvocationServer.Extensions
 {
@@ -88,5 +89,31 @@ namespace ConvocationServer.Extensions
                 return null;
             }
         }
+
+        public static string Base64Encode(this string source)
+        {
+            try
+            {
+                byte[] plainTextBytes = Encoding.UTF8.GetBytes(source);
+                return Convert.ToBase64String(plainTextBytes);
+            } 
+            catch
+            {
+                return source;
+            }
+        }
+        public static string Base64Decode(this string source)
+        {
+            try
+            {
+                byte[] base64EncodedBytes = Convert.FromBase64String(source);
+                return Encoding.UTF8.GetString(base64EncodedBytes);
+            }
+            catch
+            {
+                return source;
+            }
+        }
+
     }
 }
