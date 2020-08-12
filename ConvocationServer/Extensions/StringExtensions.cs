@@ -4,6 +4,7 @@ using NUnit.Framework;
 using System;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace ConvocationServer.Extensions
 {
@@ -115,5 +116,9 @@ namespace ConvocationServer.Extensions
             }
         }
 
+        public static string AsAstricts(this string source)
+        {
+            return Regex.Replace(source, "(.+)", "*");
+        }
     }
 }
