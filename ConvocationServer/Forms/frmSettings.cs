@@ -14,11 +14,6 @@ namespace ConvocationServer.Forms
             InitializeComponent();
 
             StorageSettings = settings;
-            LoadSettings();
-        }
-
-        private void LoadSettings()
-        {
             txtIP.Text = StorageSettings.IPAddress;
             numPort.Value = StorageSettings.Port;
         }
