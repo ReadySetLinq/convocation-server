@@ -32,6 +32,9 @@ namespace ConvocationServer
             TblMessages.Columns.Add("Direction", typeof(string));
             TblMessages.Columns.Add("Timestamp", typeof(string));
             dgvMessages.DataSource = TblMessages;
+            
+            // Load settings
+            StorageSettings.Load();
 
             LstForms = new List<Form>
             {
