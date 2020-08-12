@@ -76,10 +76,8 @@ namespace ConvocationServer.Storage
 
         public bool AddAccount(string userName, string password)
         {
-            string _userName = userName.ToLower().Trim();
-
             // Make sure the userName doesn't already exist
-            if (Accounts.FindIndex(a => a.LowerName.Equals(_userName)) != -1) return false;
+            if (GetAccountIndex(userName) != -1) return false;
 
             Accounts.Add(new Account(userName, password.Base64Encode()));
             return true;
@@ -87,8 +85,7 @@ namespace ConvocationServer.Storage
 
         public bool RemoveAccount(string userName)
         {
-            string _userName = userName.ToLower().Trim();
-            int index = Accounts.FindIndex(a => a.LowerName.Equals(_userName));
+            int index = GetAccountIndex(userName);
 
             // Make sure the userName exist
             if (index == -1) return false;
@@ -99,8 +96,7 @@ namespace ConvocationServer.Storage
 
         public bool EditAccountPassword(string userName, string newPassword)
         {
-            string _userName = userName.ToLower().Trim();
-            Account account = Accounts.FirstOrDefault(a => a.LowerName.Equals(_userName));
+            Account account = GetAccount(userName);
 
             // Make sure an account was found
             if (account == null) return false;
@@ -111,14 +107,25 @@ namespace ConvocationServer.Storage
 
         public bool IsValidAccountLogin(string userName, string password)
         {
-            string _userName = userName.ToLower().Trim();
-            Account account = Accounts.FirstOrDefault(a => a.LowerName.Equals(_userName));
+            Account account = GetAccount(userName);
 
             // Make sure an account was found
             if (account == null) return false;
 
             // Return if the password matches
             return (account.Password.Equals(password.Base64Encode()));
+        }
+
+        public int GetAccountIndex(string userName)
+        {
+            string _userName = userName.ToLower().Trim();
+            return Accounts.FindIndex(a => a.LowerName.Equals(_userName));
+        }
+
+        public Account GetAccount(string userName)
+        {
+            string _userName = userName.ToLower().Trim();
+            return Accounts.FirstOrDefault(a => a.LowerName.Equals(_userName));
         }
 
     }
