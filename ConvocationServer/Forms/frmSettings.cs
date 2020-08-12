@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ConvocationServer.Storage;
+using System;
 using System.Net;
 using System.Windows.Forms;
 
@@ -6,27 +7,33 @@ namespace ConvocationServer.Forms
 {
     public partial class FrmSettings : Form
     {
-        public FrmSettings()
+        public Settings StorageSettings;
+
+        public FrmSettings(Settings settings)
         {
             InitializeComponent();
 
-            this.LoadSettings();
+            StorageSettings = settings;
+            LoadSettings();
         }
 
         private void LoadSettings()
         {
-            txtIP.Text = Dns.GetHostEntry(Dns.GetHostName()).AddressList[1].ToString();
-            numPort.Value = 8181;
+            txtIP.Text = StorageSettings.IPAddress;
+            numPort.Value = StorageSettings.Port;
         }
 
         private void BtnSave_Click(object sender, EventArgs e)
         {
-            this.Hide();
+            StorageSettings.IPAddress = txtIP.Text.Trim();
+            StorageSettings.Port = (int)numPort.Value;
+            StorageSettings.Save();
+            Hide();
         }
 
         private void BtnClose_Click(object sender, EventArgs e)
         {
-            this.Hide();
+            Hide();
         }
     }
 }
