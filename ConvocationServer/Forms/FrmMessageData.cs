@@ -19,14 +19,14 @@ namespace ConvocationServer.Forms
 
         public void SetData(string message = "", string direction = "Unknown", string timestamp = "Unknown")
         {
-            this.txtMessage.Text = message;
-            this.txtDirection.Text = direction;
-            this.txtTimestamp.Text = timestamp;
+            txtMessage.Text = message;
+            txtDirection.Text = direction;
+            txtTimestamp.Text = timestamp;
         }
 
         private void BtnClose_Click(object sender, EventArgs e)
         {
-            this.Hide();
+            Hide();
         }
     }
 }

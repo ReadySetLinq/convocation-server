@@ -32,7 +32,7 @@ namespace ConvocationServer.Sockets
             this.Port = port;
         }
 
-        public Boolean Start()
+        public bool Start()
         {
             if (this.Address.Length == 0 || this.Port == -1) return false;
 

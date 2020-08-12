@@ -95,8 +95,8 @@ namespace ConvocationServer.XPN
                                     publishedObject.SetPropertyString(propID, value.Trim());
                                     break;
                                 case PropertyType.pt_Boolean:
-                                    Boolean val;
-                                    if (Boolean.TryParse(value.Trim(), out val))
+                                    bool val;
+                                    if (bool.TryParse(value.Trim(), out val))
                                         publishedObject.SetPropertyBool(propID, val);
                                     break;
                                 case PropertyType.pt_Material:
