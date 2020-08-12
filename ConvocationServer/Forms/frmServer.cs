@@ -11,15 +11,16 @@ namespace ConvocationServer
     public partial class FrmServer : Form
     {
         private readonly List<Form> LstForms;
-        private readonly DataTable TblMessages = new DataTable();
         private readonly SocketServer Server = new SocketServer();
-        private readonly Settings StorageSettings = new Settings();
         private readonly System.Timers.Timer tmrFailedToConnect = new System.Timers.Timer
         {
             Interval = 5000,
             AutoReset = false
         };
-        
+
+        public DataTable TblMessages = new DataTable();
+        public Settings StorageSettings = new Settings();
+
 
         public FrmServer()
         {
@@ -39,9 +40,11 @@ namespace ConvocationServer
             LstForms = new List<Form>
             {
                 // Settings = Index 0
-               new FrmSettings(StorageSettings),
+               new FrmSettings(this),
                // MessageData = Index 1
-               new FrmMessageData()
+               new FrmMessageData(),
+               // Users Manager = Index 2
+               new FrmUsers(this),
             };
 
             notifyIcon.BalloonTipTitle = "RSL - Server";
@@ -159,7 +162,8 @@ namespace ConvocationServer
         // User ToolStrip Buttons
         private void ManageToolStripMenuItem_Click(object sender, EventArgs e)
         {
-
+            LstForms[2].Show();
+            LstForms[2].BringToFront();
         }
 
         private void AddNewToolStripMenuItem_Click(object sender, EventArgs e)
