@@ -4,20 +4,16 @@ using System.Data;
 using System.Windows.Forms;
 using ConvocationServer.Forms;
 using ConvocationServer.Sockets;
+using ConvocationServer.Storage;
 
 namespace ConvocationServer
 {
     public partial class FrmServer : Form
     {
-        private readonly List<Form> LstForms = new List<Form>
-        {
-            // Settings = Index 0
-           new FrmSettings(),
-           // MessageData = Index 1
-           new FrmMessageData()
-        };
-        private DataTable TblMessages = new DataTable();
+        private readonly List<Form> LstForms;
+        private readonly DataTable TblMessages = new DataTable();
         private readonly SocketServer Server = new SocketServer();
+        private readonly Settings StorageSettings = new Settings();
         private readonly System.Timers.Timer tmrFailedToConnect = new System.Timers.Timer
         {
             Interval = 5000,
@@ -29,21 +25,29 @@ namespace ConvocationServer
         {
             InitializeComponent();
 
-            this.Text += " v" + Application.ProductVersion;
-            this.lblStatus.Text = "Stopped";
-            this.tmrFailedToConnect.Elapsed += this.OnFailedToOpenEvent;
-            this.TblMessages.Columns.Add("Data", typeof(string));
-            this.TblMessages.Columns.Add("Direction", typeof(string));
-            this.TblMessages.Columns.Add("Timestamp", typeof(string));
-            this.dgvMessages.DataSource = this.TblMessages;
+            Text += " v" + Application.ProductVersion;
+            lblStatus.Text = "Stopped";
+            tmrFailedToConnect.Elapsed += OnFailedToOpenEvent;
+            TblMessages.Columns.Add("Data", typeof(string));
+            TblMessages.Columns.Add("Direction", typeof(string));
+            TblMessages.Columns.Add("Timestamp", typeof(string));
+            dgvMessages.DataSource = TblMessages;
+
+            LstForms = new List<Form>
+            {
+                // Settings = Index 0
+               new FrmSettings(StorageSettings),
+               // MessageData = Index 1
+               new FrmMessageData()
+            };
 
             notifyIcon.BalloonTipTitle = "RSL - Server";
             notifyIcon.BalloonTipText = "Double click to open!";
             notifyIcon.BalloonTipIcon = ToolTipIcon.Info;
             notifyIcon.Visible = true;
 
-            // this.WindowState = FormWindowState.Minimized;
-            // this.MinimizeToTray();
+            // WindowState = FormWindowState.Minimized;
+            // MinimizeToTray();
         }
 
         private void MinimizeToTray()
@@ -65,16 +69,16 @@ namespace ConvocationServer
         {
             //if the form is minimized hide it from the task bar  
             //and show the system tray icon (represented by the NotifyIcon control)  
-            if (this.WindowState == FormWindowState.Minimized)
+            if (WindowState == FormWindowState.Minimized)
             {
-                this.MinimizeToTray();
+                MinimizeToTray();
             }
         }
 
         private void LblStatus_TextChanged(object sender, EventArgs e)
         {
-            Label lbl = this.lblStatus;
-            ToolStripMenuItem statusItem = this.statusStripMenuItem;
+            Label lbl = lblStatus;
+            ToolStripMenuItem statusItem = statusStripMenuItem;
 
             if (lbl.Text == "Started")
             {
@@ -92,28 +96,28 @@ namespace ConvocationServer
         // ctxMenuStripNotify Buttons
         private void ConnectToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            this.ToggleServer();
+            ToggleServer();
         }
 
         private void ShowToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (this.showToolStripMenuItem.Text == "Hide")
+            if (showToolStripMenuItem.Text == "Hide")
             {
-                this.WindowState = FormWindowState.Minimized;
-                this.MinimizeToTray();
+                WindowState = FormWindowState.Minimized;
+                MinimizeToTray();
             }
             else
             {
                 Show();
-                this.WindowState = FormWindowState.Normal;
-                this.showToolStripMenuItem.Text = "Hide";
-                this.ctxMenuStripNotify.Hide();
+                WindowState = FormWindowState.Normal;
+                showToolStripMenuItem.Text = "Hide";
+                ctxMenuStripNotify.Hide();
             }
         }
 
         private void ExitToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            this.ExitApp();
+            ExitApp();
         }
 
         // File ToolStrip Buttons
@@ -124,28 +128,28 @@ namespace ConvocationServer
 
         private void StatusStripMenuItem_Click(object sender, EventArgs e)
         {
-            this.ToggleServer();
+            ToggleServer();
         }
 
         private void OnFailedToOpenEvent(Object source, System.Timers.ElapsedEventArgs e)
         {
             // Reset to status to Stopped
-            this.lblStatus.Invoke((MethodInvoker)delegate {
+            lblStatus.Invoke((MethodInvoker)delegate {
                 // Running on the UI thread
-                this.lblStatus.Text = "Stopped";
+                lblStatus.Text = "Stopped";
             });
 
         }
 
         private void HideWindowStripMenuItem_Click(object sender, EventArgs e)
         {
-            this.WindowState = FormWindowState.Minimized;
-            this.MinimizeToTray();
+            WindowState = FormWindowState.Minimized;
+            MinimizeToTray();
         }
 
         private void ExitStripMenuItem_Click(object sender, EventArgs e)
         {
-            this.ExitApp();
+            ExitApp();
         }
 
         // User ToolStrip Buttons
@@ -172,56 +176,56 @@ namespace ConvocationServer
 
         private void CmbDataView_SelectedIndexChanged(object sender, EventArgs e)
         {
-           switch(this.cmbDataView.SelectedIndex)
+           switch(cmbDataView.SelectedIndex)
             {
                 case 0: // All
-                    this.DataViewFilter(this.dgvMessages, "Direction", "");
+                    DataViewFilter(dgvMessages, "Direction", "");
                     break;
                 case 1: // Incoming
-                    this.DataViewFilter(this.dgvMessages, "Direction", "Incoming");
+                    DataViewFilter(dgvMessages, "Direction", "Incoming");
                     break;
                 case 2: // Outgoing
-                    this.DataViewFilter(this.dgvMessages, "Direction", "Outgoing");
+                    DataViewFilter(dgvMessages, "Direction", "Outgoing");
                     break;
                 default: // All
-                    this.DataViewFilter(this.dgvMessages, "Direction", "");
+                    DataViewFilter(dgvMessages, "Direction", "");
                     break;
             }
         }
 
         private void ExitApp()
         {
-            this.notifyIcon.Visible = false;
+            notifyIcon.Visible = false;
             Application.Exit();
         }
 
         private void ToggleServer()
         {
-            if (this.Server.IsConnected)
+            if (Server.IsConnected)
             {
-                this.Server.Stop();
-                this.lblStatus.Text = "Stopped";
+                Server.Stop();
+                lblStatus.Text = "Stopped";
             }
             else
             {
-                if (this.Server.Start())
+                if (Server.Start())
                 {
-                    this.lblStatus.Text = "Started";
-                    this.tmrFailedToConnect.Stop();
+                    lblStatus.Text = "Started";
+                    tmrFailedToConnect.Stop();
                 }
                 else
                 {
-                    if (!this.tmrFailedToConnect.Enabled)
+                    if (!tmrFailedToConnect.Enabled)
                     {
-                        this.tmrFailedToConnect.Start();
+                        tmrFailedToConnect.Start();
                     }
                     else
                     {
-                        this.tmrFailedToConnect.Stop();
-                        this.tmrFailedToConnect.Start();
+                        tmrFailedToConnect.Stop();
+                        tmrFailedToConnect.Start();
                     }
 
-                    this.lblStatus.Text = "Failed to Start!";
+                    lblStatus.Text = "Failed to Start!";
                 }
             }
         }
@@ -262,16 +266,16 @@ namespace ConvocationServer
             int rowSelected = e.RowIndex;
             if (e.RowIndex != -1)
             {
-                this.dgvMessages.Rows[rowSelected].Selected = true;
+                dgvMessages.Rows[rowSelected].Selected = true;
             }
             e.ContextMenuStrip = ctxMenuStripMessageData;
         }
 
         private void ToolStripMenuItemDetailedView_Click(object sender, EventArgs e)
         {
-            if (this.dgvMessages.SelectedRows.Count == 0) return;
+            if (dgvMessages.SelectedRows.Count == 0) return;
 
-            DataGridViewRow row = this.dgvMessages.SelectedRows[0];
+            DataGridViewRow row = dgvMessages.SelectedRows[0];
             FrmMessageData frm = (FrmMessageData)LstForms[1];
 
             if (frm == null || row.Cells.Count != 3) return;
