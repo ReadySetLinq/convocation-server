@@ -127,6 +127,7 @@ namespace ConvocationServer
         private void SettingsStripMenuItem_Click(object sender, EventArgs e)
         {
             LstForms[0].Show();
+            LstForms[0].BringToFront();
         }
 
         private void StatusStripMenuItem_Click(object sender, EventArgs e)
