@@ -7,22 +7,24 @@ namespace ConvocationServer.Forms
 {
     public partial class FrmSettings : Form
     {
-        public Settings StorageSettings;
+        private readonly FrmServer _parent;
 
-        public FrmSettings(Settings settings)
+        public FrmSettings(FrmServer parent)
         {
             InitializeComponent();
+            _parent = parent;
 
-            StorageSettings = settings;
-            txtIP.Text = StorageSettings.IPAddress;
-            numPort.Value = StorageSettings.Port;
+            Settings storageSettings = _parent.StorageSettings;
+            txtIP.Text = storageSettings.IPAddress;
+            numPort.Value = storageSettings.Port;
         }
 
         private void BtnSave_Click(object sender, EventArgs e)
         {
-            StorageSettings.IPAddress = txtIP.Text.Trim();
-            StorageSettings.Port = (int)numPort.Value;
-            StorageSettings.Save();
+            Settings storageSettings = _parent.StorageSettings;
+            storageSettings.IPAddress = txtIP.Text.Trim();
+            storageSettings.Port = (int)numPort.Value;
+            storageSettings.Save();
             Hide();
         }
 
