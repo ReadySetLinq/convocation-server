@@ -115,7 +115,7 @@
             this.helpToolStripMenuItem});
             this.menuStripServer.Location = new System.Drawing.Point(0, 0);
             this.menuStripServer.Name = "menuStripServer";
-            this.menuStripServer.Size = new System.Drawing.Size(622, 28);
+            this.menuStripServer.Size = new System.Drawing.Size(622, 30);
             this.menuStripServer.TabIndex = 0;
             this.menuStripServer.Text = "RSL";
             // 
@@ -128,7 +128,7 @@
             this.exitStripMenuItem});
             this.fileToolStripMenuItem.ForeColor = System.Drawing.Color.Black;
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
-            this.fileToolStripMenuItem.Size = new System.Drawing.Size(46, 24);
+            this.fileToolStripMenuItem.Size = new System.Drawing.Size(46, 26);
             this.fileToolStripMenuItem.Text = "File";
             this.fileToolStripMenuItem.ToolTipText = "File";
             // 
@@ -167,7 +167,7 @@
             this.manageToolStripMenuItem});
             this.usersStripMenuItem.ForeColor = System.Drawing.Color.Black;
             this.usersStripMenuItem.Name = "usersStripMenuItem";
-            this.usersStripMenuItem.Size = new System.Drawing.Size(58, 24);
+            this.usersStripMenuItem.Size = new System.Drawing.Size(58, 26);
             this.usersStripMenuItem.Text = "Users";
             // 
             // manageToolStripMenuItem
@@ -183,7 +183,7 @@
             this.infoToolStripMenuItem});
             this.helpToolStripMenuItem.ForeColor = System.Drawing.Color.Black;
             this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
-            this.helpToolStripMenuItem.Size = new System.Drawing.Size(55, 24);
+            this.helpToolStripMenuItem.Size = new System.Drawing.Size(55, 26);
             this.helpToolStripMenuItem.Text = "Help";
             // 
             // infoToolStripMenuItem
@@ -283,7 +283,7 @@
             dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
             this.dgvMessages.DefaultCellStyle = dataGridViewCellStyle1;
             this.dgvMessages.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dgvMessages.Location = new System.Drawing.Point(0, 28);
+            this.dgvMessages.Location = new System.Drawing.Point(0, 30);
             this.dgvMessages.MultiSelect = false;
             this.dgvMessages.Name = "dgvMessages";
             this.dgvMessages.RightToLeft = System.Windows.Forms.RightToLeft.No;
@@ -295,7 +295,7 @@
             this.dgvMessages.RowsDefaultCellStyle = dataGridViewCellStyle2;
             this.dgvMessages.RowTemplate.ContextMenuStrip = this.ctxMenuStripMessageData;
             this.dgvMessages.RowTemplate.Height = 24;
-            this.dgvMessages.Size = new System.Drawing.Size(622, 373);
+            this.dgvMessages.Size = new System.Drawing.Size(622, 371);
             this.dgvMessages.TabIndex = 2;
             this.dgvMessages.CellContextMenuStripNeeded += new System.Windows.Forms.DataGridViewCellContextMenuStripNeededEventHandler(this.DgvMessages_CellContextMenuStripNeeded);
             // 
