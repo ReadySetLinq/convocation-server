@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.groupSelectedUser = new System.Windows.Forms.GroupBox();
             this.btnReset = new System.Windows.Forms.Button();
             this.btnSave = new System.Windows.Forms.Button();
@@ -38,8 +39,12 @@
             this.btnCancel = new System.Windows.Forms.Button();
             this.groupUsers = new System.Windows.Forms.GroupBox();
             this.lstUsers = new System.Windows.Forms.ListBox();
+            this.ctxMenuStripUser = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.removeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.btnAddNew = new System.Windows.Forms.Button();
             this.groupSelectedUser.SuspendLayout();
             this.groupUsers.SuspendLayout();
+            this.ctxMenuStripUser.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupSelectedUser
@@ -61,7 +66,7 @@
             // 
             // btnReset
             // 
-            this.btnReset.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnReset.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnReset.ForeColor = System.Drawing.Color.Black;
             this.btnReset.Location = new System.Drawing.Point(250, 153);
             this.btnReset.Name = "btnReset";
@@ -73,7 +78,7 @@
             // 
             // btnSave
             // 
-            this.btnSave.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnSave.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnSave.ForeColor = System.Drawing.Color.Black;
             this.btnSave.Location = new System.Drawing.Point(12, 153);
             this.btnSave.Name = "btnSave";
@@ -124,11 +129,11 @@
             // 
             // btnCancel
             // 
-            this.btnCancel.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnCancel.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnCancel.ForeColor = System.Drawing.Color.Black;
             this.btnCancel.Location = new System.Drawing.Point(147, 235);
             this.btnCancel.Name = "btnCancel";
-            this.btnCancel.Size = new System.Drawing.Size(347, 40);
+            this.btnCancel.Size = new System.Drawing.Size(347, 31);
             this.btnCancel.TabIndex = 8;
             this.btnCancel.TabStop = false;
             this.btnCancel.Text = "Close";
@@ -142,7 +147,7 @@
             this.groupUsers.ForeColor = System.Drawing.Color.WhiteSmoke;
             this.groupUsers.Location = new System.Drawing.Point(4, 0);
             this.groupUsers.Name = "groupUsers";
-            this.groupUsers.Size = new System.Drawing.Size(127, 275);
+            this.groupUsers.Size = new System.Drawing.Size(127, 235);
             this.groupUsers.TabIndex = 9;
             this.groupUsers.TabStop = false;
             this.groupUsers.Text = "Users";
@@ -151,6 +156,7 @@
             // 
             this.lstUsers.BackColor = System.Drawing.Color.DimGray;
             this.lstUsers.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.lstUsers.ContextMenuStrip = this.ctxMenuStripUser;
             this.lstUsers.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lstUsers.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lstUsers.ForeColor = System.Drawing.Color.WhiteSmoke;
@@ -158,29 +164,61 @@
             this.lstUsers.ItemHeight = 20;
             this.lstUsers.Location = new System.Drawing.Point(3, 23);
             this.lstUsers.Name = "lstUsers";
-            this.lstUsers.Size = new System.Drawing.Size(121, 249);
+            this.lstUsers.Size = new System.Drawing.Size(121, 209);
             this.lstUsers.TabIndex = 0;
             this.lstUsers.SelectedIndexChanged += new System.EventHandler(this.LstUsers_SelectedIndexChanged);
+            // 
+            // ctxMenuStripUser
+            // 
+            this.ctxMenuStripUser.ImageScalingSize = new System.Drawing.Size(20, 20);
+            this.ctxMenuStripUser.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.removeToolStripMenuItem});
+            this.ctxMenuStripUser.Name = "ctxMenuStripUser";
+            this.ctxMenuStripUser.Size = new System.Drawing.Size(133, 28);
+            this.ctxMenuStripUser.Opening += new System.ComponentModel.CancelEventHandler(this.CtxMenuStripUser_Opening);
+            // 
+            // removeToolStripMenuItem
+            // 
+            this.removeToolStripMenuItem.Name = "removeToolStripMenuItem";
+            this.removeToolStripMenuItem.Size = new System.Drawing.Size(210, 24);
+            this.removeToolStripMenuItem.Text = "Remove";
+            this.removeToolStripMenuItem.Click += new System.EventHandler(this.RemoveToolStripMenuItem_Click);
+            // 
+            // btnAddNew
+            // 
+            this.btnAddNew.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnAddNew.ForeColor = System.Drawing.Color.Black;
+            this.btnAddNew.Location = new System.Drawing.Point(7, 235);
+            this.btnAddNew.Name = "btnAddNew";
+            this.btnAddNew.Size = new System.Drawing.Size(117, 31);
+            this.btnAddNew.TabIndex = 10;
+            this.btnAddNew.TabStop = false;
+            this.btnAddNew.Text = "Add New";
+            this.btnAddNew.UseVisualStyleBackColor = true;
+            this.btnAddNew.Click += new System.EventHandler(this.BtnAddNew_Click);
             // 
             // FrmUsers
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.DimGray;
-            this.ClientSize = new System.Drawing.Size(532, 316);
+            this.ClientSize = new System.Drawing.Size(532, 307);
             this.ControlBox = false;
+            this.Controls.Add(this.btnAddNew);
             this.Controls.Add(this.groupUsers);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.groupSelectedUser);
             this.ForeColor = System.Drawing.Color.WhiteSmoke;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Name = "FrmUsers";
+            this.ShowIcon = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "User Manager";
             this.Shown += new System.EventHandler(this.FrmUsers_Shown);
             this.groupSelectedUser.ResumeLayout(false);
             this.groupSelectedUser.PerformLayout();
             this.groupUsers.ResumeLayout(false);
+            this.ctxMenuStripUser.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -196,5 +234,8 @@
         private System.Windows.Forms.Button btnReset;
         private System.Windows.Forms.GroupBox groupUsers;
         private System.Windows.Forms.ListBox lstUsers;
+        private System.Windows.Forms.Button btnAddNew;
+        private System.Windows.Forms.ContextMenuStrip ctxMenuStripUser;
+        private System.Windows.Forms.ToolStripMenuItem removeToolStripMenuItem;
     }
 }
