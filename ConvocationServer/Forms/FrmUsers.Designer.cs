@@ -110,7 +110,6 @@
             // txtUserName
             // 
             this.txtUserName.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.txtUserName.Enabled = false;
             this.txtUserName.Location = new System.Drawing.Point(122, 39);
             this.txtUserName.Name = "txtUserName";
             this.txtUserName.Size = new System.Drawing.Size(204, 27);

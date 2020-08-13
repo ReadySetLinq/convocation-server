@@ -46,8 +46,16 @@ namespace ConvocationServer.Forms
         private void BtnAddNew_Click(object sender, EventArgs e)
         {
             Settings storageSettings = _parent.StorageSettings;
-            storageSettings.AddAccount(DateTime.Now.ToString(), DateTime.Now.Second.ToString());
-            UpdateUsers();
+            // Setup new account to add
+            Account _newAccount = new Account($"user{storageSettings.Accounts.Count + 1}", "password");
+
+            // Try to add the new account, if this fails return out
+            if (!storageSettings.AddAccount(_newAccount.UserName, _newAccount.Password)) return;
+
+            int newIndex = lstUsers.Items.Add(_newAccount.UserName);
+
+            if (newIndex == -1) return;
+            lstUsers.SelectedIndex = newIndex;
         }
 
         private void BtnCancel_Click(object sender, EventArgs e)
@@ -60,6 +68,15 @@ namespace ConvocationServer.Forms
             // If no account is selected, return
             if (selectedAccount == null) return;
 
+            // If the userName was removed, don't save
+            if (txtUserName.Text.Length == 0)
+            {
+                MessageBox.Show("You cannot save with an empty userName", "Failed to Save!",
+                                MessageBoxButtons.OK,
+                                MessageBoxIcon.Question);
+                return;
+            };
+
             // If the password was removed, don't save
             if (txtPassword.Text.Length == 0)
             {
@@ -70,8 +87,14 @@ namespace ConvocationServer.Forms
             };
 
             Settings storageSettings = _parent.StorageSettings;
-            storageSettings.EditAccountPassword(txtUserName.Text.Trim(), txtPassword.Text);
+            selectedAccount = storageSettings.EditAccount(selectedAccount.UserName, txtUserName.Text, txtPassword.Text);
             storageSettings.Save();
+
+            int index = lstUsers.SelectedIndex;
+            if (index == -1) return;
+
+            // Update the lstUsers item userName
+            lstUsers.Items[index] = txtUserName.Text.Trim();
         }
 
         private void BtnReset_Click(object sender, EventArgs e)
@@ -95,19 +118,33 @@ namespace ConvocationServer.Forms
             Settings storageSettings = _parent.StorageSettings;
             storageSettings.RemoveAccount(selectedAccount.UserName);
             storageSettings.Save();
-            UpdateUsers();
+
+            // Get current selected index
+            int index = lstUsers.SelectedIndex;
+            lstUsers.Items.RemoveAt(index);
+
+            // If  no other items exist, don't set selected again
+            if (lstUsers.Items.Count == 0)
+            {
+                ResetSelectedUser();
+                EnableSelectedUser(false);
+                return;
+            }
+
+            if (index > 0)
+                lstUsers.SelectedIndex = index - 1;
+            else
+                lstUsers.SelectedIndex = index;
         }
 
-        private void UpdateUsers()
+        private void UpdateUsers(bool resetSelected = true)
         {
             Settings storageSettings = _parent.StorageSettings;
 
             // Reset data
-            txtUserName.Text = "";
-            txtPassword.Text = "";
-            selectedAccount = null;
-            lstUsers.Items.Clear();
+            ResetSelectedUser();
             EnableSelectedUser(false);
+            lstUsers.Items.Clear();
 
             foreach (Account account in storageSettings.Accounts)
             {
@@ -123,6 +160,7 @@ namespace ConvocationServer.Forms
             // If nothing is selected, return
             if (lstUsers.SelectedIndex == -1)
             {
+                ResetSelectedUser();
                 EnableSelectedUser(false);
                 return;
             }
@@ -133,6 +171,7 @@ namespace ConvocationServer.Forms
             // If account was not found, do nothing
             if (selectedAccount == null)
             {
+                ResetSelectedUser();
                 EnableSelectedUser(false);
                 return;
             }
@@ -145,8 +184,17 @@ namespace ConvocationServer.Forms
             EnableSelectedUser(true);
         }
 
+        private void ResetSelectedUser()
+        {
+            txtUserName.Text = "";
+            txtPassword.Text = "";
+            selectedAccount = null;
+            lstUsers.SelectedIndex = -1;
+        }
+
         private void EnableSelectedUser(bool enable = false)
         {
+            txtUserName.Enabled = enable;
             txtPassword.Enabled = enable;
             btnSave.Enabled = enable;
             btnReset.Enabled = enable;
