@@ -165,8 +165,8 @@
             // usersStripMenuItem
             // 
             this.usersStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.addNewToolStripMenuItem,
-            this.manageToolStripMenuItem});
+            this.manageToolStripMenuItem,
+            this.addNewToolStripMenuItem});
             this.usersStripMenuItem.ForeColor = System.Drawing.Color.Black;
             this.usersStripMenuItem.Name = "usersStripMenuItem";
             this.usersStripMenuItem.Size = new System.Drawing.Size(58, 24);
@@ -175,14 +175,14 @@
             // addNewToolStripMenuItem
             // 
             this.addNewToolStripMenuItem.Name = "addNewToolStripMenuItem";
-            this.addNewToolStripMenuItem.Size = new System.Drawing.Size(154, 26);
+            this.addNewToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
             this.addNewToolStripMenuItem.Text = "Add New";
             this.addNewToolStripMenuItem.Click += new System.EventHandler(this.AddNewToolStripMenuItem_Click);
             // 
             // manageToolStripMenuItem
             // 
             this.manageToolStripMenuItem.Name = "manageToolStripMenuItem";
-            this.manageToolStripMenuItem.Size = new System.Drawing.Size(154, 26);
+            this.manageToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
             this.manageToolStripMenuItem.Text = "Manage";
             this.manageToolStripMenuItem.Click += new System.EventHandler(this.ManageToolStripMenuItem_Click);
             // 
@@ -314,12 +314,12 @@
             this.ctxMenuStripMessageData.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripMenuItemDetailedView});
             this.ctxMenuStripMessageData.Name = "ctxMenuStripMessageData";
-            this.ctxMenuStripMessageData.Size = new System.Drawing.Size(211, 56);
+            this.ctxMenuStripMessageData.Size = new System.Drawing.Size(172, 28);
             // 
             // toolStripMenuItemDetailedView
             // 
             this.toolStripMenuItemDetailedView.Name = "toolStripMenuItemDetailedView";
-            this.toolStripMenuItemDetailedView.Size = new System.Drawing.Size(210, 24);
+            this.toolStripMenuItemDetailedView.Size = new System.Drawing.Size(171, 24);
             this.toolStripMenuItemDetailedView.Text = "Detailed View";
             this.toolStripMenuItemDetailedView.Click += new System.EventHandler(this.ToolStripMenuItemDetailedView_Click);
             // 
