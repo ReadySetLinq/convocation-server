@@ -22,7 +22,6 @@ namespace ConvocationServer.Storage
             // Set Defaults
             IPAddress = _defaultIpAddress;
             Port = 8181;
-            Accounts = new List<Account>();
         }
 
         public string SetIPAddress(string address)
@@ -66,6 +65,10 @@ namespace ConvocationServer.Storage
             {
                 appSettings = new AppSettings();
             }
+
+            // If no accounts exist, add the default
+            if (appSettings.Accounts.Count == 0)
+                AddAccount("user", "password");
         }
 
         public void Save()
