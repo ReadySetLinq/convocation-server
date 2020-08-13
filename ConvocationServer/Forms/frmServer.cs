@@ -11,7 +11,7 @@ namespace ConvocationServer
     public partial class FrmServer : Form
     {
         private readonly List<Form> LstForms;
-        private readonly SocketServer Server = new SocketServer();
+        private readonly SocketServer Server;
         private readonly System.Timers.Timer tmrFailedToConnect = new System.Timers.Timer
         {
             Interval = 5000,
@@ -46,6 +46,7 @@ namespace ConvocationServer
                // Users Manager = Index 2
                new FrmUsers(this),
             };
+            Server = new SocketServer(this);
 
             notifyIcon.BalloonTipTitle = "RSL - Server";
             notifyIcon.BalloonTipText = "Double click to open!";
