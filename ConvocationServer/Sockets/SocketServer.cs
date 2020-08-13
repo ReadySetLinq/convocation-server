@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using ConvocationServer.Extensions;
+using ConvocationServer.Storage;
 using ConvocationServer.XPN;
 using Fleck;
 using Newtonsoft.Json.Linq;
@@ -9,34 +10,30 @@ namespace ConvocationServer.Sockets
 {
     class SocketServer
     {
+        private readonly FrmServer _parent;
         private readonly XPN_Functions XpnFunctions = new XPN_Functions();
         private List<SocketClient> Clients = new List<SocketClient>();
         private WebSocketServer Server;
         private const bool T = true;
         private const bool F = false;
-        public string Address { get; set; }
-        public int Port { get; set; }
 
-        public Boolean IsConnected { get; set; }
+        public bool IsConnected { get; set; }
 
-        public SocketServer() 
+        public SocketServer(FrmServer parent) 
         {
-            this.IsConnected = false;
-            this.Address = "";
-            this.Port = -1;
-        }
-
-        public void SetData(string address, int port)
-        {
-            this.Address = address;
-            this.Port = port;
+            _parent = parent;
+            IsConnected = false;
         }
 
         public bool Start()
         {
-            if (this.Address.Length == 0 || this.Port == -1) return false;
+            Settings storageSettings = _parent.StorageSettings;
+            string address = storageSettings.IPAddress.Trim();
+            int port = storageSettings.Port;
 
-            this.Server = new WebSocketServer($"{"ws"}://{this.Address}:{this.Port}")
+            if (address.Length == 0 || port <= 0) return false;
+
+            Server = new WebSocketServer($"ws://{address}:{port}")
             {
                 RestartAfterListenError = T
             };
@@ -249,7 +246,7 @@ namespace ConvocationServer.Sockets
                     }
                     catch (Exception e) { Console.Error.WriteLine(e); };
                 };
-                this.IsConnected = true;
+                IsConnected = true;
             });
             return true;
         }
@@ -257,7 +254,7 @@ namespace ConvocationServer.Sockets
         public void Stop()
         {
             // *  Send all connections a shutdown message
-            this.SendToAll(message: new JObject
+            SendToAll(message: new JObject
             {
                 { "service", "server" },
                 { "data", new JObject {
@@ -265,8 +262,8 @@ namespace ConvocationServer.Sockets
                 }}
             }, verifyLogin: F);
 
-            this.Server.Dispose();
-            this.IsConnected = false;
+            Server.Dispose();
+            IsConnected = false;
         }
 
         // Send a message to everyone in a given service
@@ -291,11 +288,10 @@ namespace ConvocationServer.Sockets
         }
 
         // Verify login information given
-        private static bool IsValidLogin(string userName, string password)
+        private bool IsValidLogin(string userName, string password)
         {
-            return userName != null && userName.ToLower() == "brtf" &&
-                password != null && password.ToLower() == "brtfuser"
-                ? T : F;
+            return userName == null || password == null
+                ? F : _parent.StorageSettings.IsValidAccountLogin(userName, password);
         }
 
         // Get a specific SocketClient based on its socket connection info ID
