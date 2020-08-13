@@ -118,7 +118,7 @@ namespace ConvocationServer.Extensions
 
         public static string AsAstricts(this string source)
         {
-            return Regex.Replace(source, "(.+)", "*");
+            return Regex.Replace(source, "(.)", "*");
         }
     }
 }
