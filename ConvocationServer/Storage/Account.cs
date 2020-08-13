@@ -3,15 +3,17 @@ namespace ConvocationServer.Storage
 {
     public class Account
     {
-        public string UserName { get; set; }
-        public string Password { get; set; }
+        private string _userName = "user";
+
+        public string UserName { get => _userName; set => _userName = value.Trim(); }
+        public string Password { get; set; } = "password";
 
         public Account(string userName, string password)
         {
-            UserName = userName.Trim();
+            UserName = userName;
             Password = password;
         }
 
-        public string LowerName { get => this.UserName.ToLower(); }
+        public string LowerName { get => _userName.ToLower(); }
     }
 }
