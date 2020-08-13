@@ -84,6 +84,7 @@ namespace ConvocationServer.Storage
             if (GetAccountIndex(userName) != -1) return false;
 
             Accounts.Add(new Account(userName, password.Base64Encode()));
+            Save();
             return true;
         }
 
@@ -98,15 +99,16 @@ namespace ConvocationServer.Storage
             return true;
         }
 
-        public bool EditAccountPassword(string userName, string newPassword)
+        public Account EditAccount(string userName, string newUsername, string newPassword)
         {
             Account account = GetAccount(userName);
 
             // Make sure an account was found
-            if (account == null) return false;
+            if (account == null) return null;
 
+            account.UserName = newUsername;
             account.Password = newPassword;
-            return true;
+            return account;
         }
 
         public bool IsValidAccountLogin(string userName, string password)
