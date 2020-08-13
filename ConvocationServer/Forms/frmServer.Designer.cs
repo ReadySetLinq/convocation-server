@@ -30,8 +30,8 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmServer));
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
             this.notifyIcon = new System.Windows.Forms.NotifyIcon(this.components);
             this.ctxMenuStripNotify = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.connectToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -44,7 +44,6 @@
             this.hideWindowStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exitStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.usersStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.addNewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.manageToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.infoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -165,19 +164,11 @@
             // usersStripMenuItem
             // 
             this.usersStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.manageToolStripMenuItem,
-            this.addNewToolStripMenuItem});
+            this.manageToolStripMenuItem});
             this.usersStripMenuItem.ForeColor = System.Drawing.Color.Black;
             this.usersStripMenuItem.Name = "usersStripMenuItem";
             this.usersStripMenuItem.Size = new System.Drawing.Size(58, 24);
             this.usersStripMenuItem.Text = "Users";
-            // 
-            // addNewToolStripMenuItem
-            // 
-            this.addNewToolStripMenuItem.Name = "addNewToolStripMenuItem";
-            this.addNewToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
-            this.addNewToolStripMenuItem.Text = "Add New";
-            this.addNewToolStripMenuItem.Click += new System.EventHandler(this.AddNewToolStripMenuItem_Click);
             // 
             // manageToolStripMenuItem
             // 
@@ -283,25 +274,25 @@
             this.dgvMessages.BackgroundColor = System.Drawing.Color.DimGray;
             this.dgvMessages.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.dgvMessages.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle1.ForeColor = System.Drawing.Color.WhiteSmoke;
-            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dgvMessages.DefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle3.ForeColor = System.Drawing.Color.WhiteSmoke;
+            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dgvMessages.DefaultCellStyle = dataGridViewCellStyle3;
             this.dgvMessages.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dgvMessages.Location = new System.Drawing.Point(0, 28);
             this.dgvMessages.MultiSelect = false;
             this.dgvMessages.Name = "dgvMessages";
             this.dgvMessages.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.dgvMessages.RowHeadersWidth = 51;
-            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            this.dgvMessages.RowsDefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle4.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle4.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle4.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            this.dgvMessages.RowsDefaultCellStyle = dataGridViewCellStyle4;
             this.dgvMessages.RowTemplate.ContextMenuStrip = this.ctxMenuStripMessageData;
             this.dgvMessages.RowTemplate.Height = 24;
             this.dgvMessages.Size = new System.Drawing.Size(622, 373);
@@ -371,7 +362,6 @@
         private System.Windows.Forms.ToolStripMenuItem exitStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem usersStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem manageToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem addNewToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem helpToolStripMenuItem;
         private System.Windows.Forms.Panel panelBottom;
         private System.Windows.Forms.Label lblStatus;

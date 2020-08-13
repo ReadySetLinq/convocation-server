@@ -166,11 +166,6 @@ namespace ConvocationServer
             LstForms[2].BringToFront();
         }
 
-        private void AddNewToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-
-        }
-
         // Help ToolStrip Buttons
         private void InfoToolStripMenuItem_Click(object sender, EventArgs e)
         {
