@@ -1,10 +1,10 @@
 ﻿using ConvocationServer.Extensions;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
-using System.Text.Json;
 
 namespace ConvocationServer.Storage
 {
@@ -15,6 +15,7 @@ namespace ConvocationServer.Storage
         public string IPAddress { get; set; }
         public int Port { get; set; }
         public List<Account> Accounts { get; set; }
+
 
         public AppSettings()
         {
@@ -59,7 +60,7 @@ namespace ConvocationServer.Storage
             {
                 // Get all text from our file, Base64 decode it to it's JSON string
                 // Then deseralize that JSON string into an AppSettings object
-                appSettings = JsonSerializer.Deserialize<AppSettings>(File.ReadAllText(fileName).Base64Decode());
+                appSettings = JsonConvert.DeserializeObject<AppSettings>(File.ReadAllText(fileName).Base64Decode());
             }
             catch
             {
@@ -71,7 +72,7 @@ namespace ConvocationServer.Storage
         {
             // Seralize appSettings class into JSON string
             // Then Base64 encode that string an save it to our file
-            File.WriteAllText(fileName, JsonSerializer.Serialize(appSettings).Base64Encode());
+            File.WriteAllText(fileName, JsonConvert.SerializeObject(appSettings).Base64Encode());
         }
 
         public bool AddAccount(string userName, string password)
