@@ -108,9 +108,9 @@ namespace ConvocationServer.Forms
             // Only continue if a selected account is set
             if (selectedAccount == null) return;
 
-            DialogResult result = MessageBox.Show("This action cannot be undone!", "Are you sure?",
-                                MessageBoxButtons.YesNo,
-                                MessageBoxIcon.Question);
+            DialogResult result = MessageBox.Show("Are you sure?\nThis action cannot be undone!", 
+                                $"Remove: {selectedAccount.UserName}",
+                                MessageBoxButtons.YesNo,  MessageBoxIcon.Warning);
 
             // If the user selected no, return
             if (result == DialogResult.No) return;
