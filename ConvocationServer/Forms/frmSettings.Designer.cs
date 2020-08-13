@@ -33,8 +33,8 @@
             this.groupNetwork = new System.Windows.Forms.GroupBox();
             this.numPort = new System.Windows.Forms.NumericUpDown();
             this.label2 = new System.Windows.Forms.Label();
-            this.txtIP = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
+            this.cmbIP = new System.Windows.Forms.ComboBox();
             this.groupNetwork.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numPort)).BeginInit();
             this.SuspendLayout();
@@ -65,9 +65,9 @@
             // 
             // groupNetwork
             // 
+            this.groupNetwork.Controls.Add(this.cmbIP);
             this.groupNetwork.Controls.Add(this.numPort);
             this.groupNetwork.Controls.Add(this.label2);
-            this.groupNetwork.Controls.Add(this.txtIP);
             this.groupNetwork.Controls.Add(this.label1);
             this.groupNetwork.Dock = System.Windows.Forms.DockStyle.Top;
             this.groupNetwork.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -105,16 +105,6 @@
             this.label2.TabIndex = 2;
             this.label2.Text = "Port:";
             // 
-            // txtIP
-            // 
-            this.txtIP.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.txtIP.Location = new System.Drawing.Point(51, 27);
-            this.txtIP.Name = "txtIP";
-            this.txtIP.Size = new System.Drawing.Size(298, 27);
-            this.txtIP.TabIndex = 1;
-            this.txtIP.Tag = "This is for external devices connecting. Do NOT change this unless you have a spe" +
-    "cfic reason!";
-            // 
             // label1
             // 
             this.label1.AutoSize = true;
@@ -125,6 +115,14 @@
             this.label1.Tag = "This is for external devices connecting. Do NOT change this unless you have a spe" +
     "cfic reason!";
             this.label1.Text = "IP:";
+            // 
+            // cmbIP
+            // 
+            this.cmbIP.FormattingEnabled = true;
+            this.cmbIP.Location = new System.Drawing.Point(51, 26);
+            this.cmbIP.Name = "cmbIP";
+            this.cmbIP.Size = new System.Drawing.Size(298, 28);
+            this.cmbIP.TabIndex = 4;
             // 
             // FrmSettings
             // 
@@ -159,6 +157,6 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.NumericUpDown numPort;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.TextBox txtIP;
+        private System.Windows.Forms.ComboBox cmbIP;
     }
 }
