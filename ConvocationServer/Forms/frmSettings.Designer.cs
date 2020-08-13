@@ -140,6 +140,7 @@
             this.MinimizeBox = false;
             this.Name = "FrmSettings";
             this.ShowIcon = false;
+            this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Settings";
             this.groupNetwork.ResumeLayout(false);

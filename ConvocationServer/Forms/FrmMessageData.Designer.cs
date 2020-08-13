@@ -134,6 +134,7 @@
             this.MinimizeBox = false;
             this.Name = "FrmMessageData";
             this.ShowIcon = false;
+            this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Message Data";
             this.groupBox1.ResumeLayout(false);
