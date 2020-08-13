@@ -130,8 +130,16 @@ namespace ConvocationServer
         // File ToolStrip Buttons
         private void SettingsStripMenuItem_Click(object sender, EventArgs e)
         {
-            LstForms[0].Show();
-            LstForms[0].BringToFront();
+            if (LstForms[0].IsDisposed)
+            {
+                LstForms[0] = new FrmSettings(this);
+            }
+            FrmSettings frm = (FrmSettings)LstForms[0];
+
+            if (frm == null) return;
+
+            frm.Show();
+            frm.BringToFront();
         }
 
         private void StatusStripMenuItem_Click(object sender, EventArgs e)
@@ -163,8 +171,16 @@ namespace ConvocationServer
         // User ToolStrip Buttons
         private void ManageToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            LstForms[2].Show();
-            LstForms[2].BringToFront();
+            if (LstForms[2].IsDisposed)
+            {
+                LstForms[2] = new FrmUsers(this);
+            }
+            FrmUsers frm = (FrmUsers)LstForms[2];
+
+            if (frm == null) return;
+
+            frm.Show();
+            frm.BringToFront();
         }
 
         // Help ToolStrip Buttons
@@ -279,8 +295,12 @@ namespace ConvocationServer
         {
             if (dgvMessages.SelectedRows.Count == 0) return;
 
-            DataGridViewRow row = dgvMessages.SelectedRows[0];
+            if (LstForms[1].IsDisposed)
+            {
+                LstForms[1] = new FrmMessageData();
+            }
             FrmMessageData frm = (FrmMessageData)LstForms[1];
+            DataGridViewRow row = dgvMessages.SelectedRows[0];
 
             if (frm == null || row.Cells.Count != 3) return;
 
