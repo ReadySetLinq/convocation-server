@@ -94,7 +94,7 @@ namespace ConvocationServer.Forms
 
             Settings storageSettings = _parent.StorageSettings;
             storageSettings.RemoveAccount(selectedAccount.UserName);
-
+            storageSettings.Save();
             UpdateUsers();
         }
 
