@@ -11,15 +11,17 @@ namespace ConvocationServer.Sockets
 
     class SocketClient
     {
+        private List<string> Services;
+        private FrmServer _parent;
         public IWebSocketConnection Socket { get; set; }
         public string UserName { get; set; }
         public string Password { get; set; }
         public bool LoggedIn { get; set; }
-        private List<string> Services;
 
-        public SocketClient(IWebSocketConnection socket)
+        public SocketClient(IWebSocketConnection socket, FrmServer parent)
         {
             Socket = socket;
+            _parent = parent;
             UserName = string.Empty;
             Password = string.Empty;
             LoggedIn = false;
@@ -170,8 +172,7 @@ namespace ConvocationServer.Sockets
                     {
                         string _msg = JsonConvert.SerializeObject(message);
                         Socket.Send(_msg);
-                        if (Globals.DEBUG_MODE)
-                            Console.WriteLine($"[Debug] OUT: {_msg}");
+                        _parent.AddMessage(_msg, $"{message["service"]} Response", "Outgoing");
                     }
                 }
             }
