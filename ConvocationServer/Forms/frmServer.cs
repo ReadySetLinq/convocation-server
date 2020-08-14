@@ -29,10 +29,12 @@ namespace ConvocationServer
             Text += " v" + Application.ProductVersion;
             lblStatus.Text = "Stopped";
             tmrFailedToConnect.Elapsed += OnFailedToOpenEvent;
-            TblMessages.Columns.Add("Data", typeof(string));
+            TblMessages.Columns.Add("Message", typeof(string));
+            TblMessages.Columns.Add("Title", typeof(string));
             TblMessages.Columns.Add("Direction", typeof(string));
             TblMessages.Columns.Add("Timestamp", typeof(string));
             dgvMessages.DataSource = TblMessages;
+            dgvMessages.Columns[0].Visible = false;
             
             // Load settings
             StorageSettings.Load();
@@ -152,7 +154,10 @@ namespace ConvocationServer
             // Reset to status to Stopped
             lblStatus.Invoke((MethodInvoker)delegate {
                 // Running on the UI thread
-                lblStatus.Text = "Stopped";
+                if (Server.IsConnected)
+                    lblStatus.Text = "Stop";
+                else
+                    lblStatus.Text = "Start";
             });
 
         }
@@ -213,6 +218,42 @@ namespace ConvocationServer
             }
         }
 
+        private void DgvMessages_CellContextMenuStripNeeded(object sender, DataGridViewCellContextMenuStripNeededEventArgs e)
+        {
+            dgvMessages.ClearSelection();
+            int rowSelected = e.RowIndex;
+            if (e.RowIndex != -1)
+            {
+                dgvMessages.Rows[rowSelected].Selected = true;
+            }
+            e.ContextMenuStrip = ctxMenuStripMessageData;
+        }
+
+        private void ToolStripMenuItemDetailedView_Click(object sender, EventArgs e)
+        {
+            if (dgvMessages.SelectedRows.Count == 0) return;
+
+            if (LstForms[1].IsDisposed)
+            {
+                LstForms[1] = new FrmMessageData();
+            }
+            FrmMessageData frm = (FrmMessageData)LstForms[1];
+            DataGridViewRow row = dgvMessages.SelectedRows[0];
+
+            if (frm == null || row.Cells.Count != 3) return;
+
+            object message = row.Cells[0].Value;
+            object direction = row.Cells[2].Value;
+            object timestamp = row.Cells[3].Value;
+            frm.SetData(
+                message?.ToString(),
+                direction?.ToString(),
+                timestamp?.ToString()
+            );
+            frm.Show();
+            frm.BringToFront();
+        }
+
         private void ExitApp()
         {
             notifyIcon.Visible = false;
@@ -228,25 +269,16 @@ namespace ConvocationServer
             }
             else
             {
-                if (Server.Start())
-                {
-                    lblStatus.Text = "Started";
-                    tmrFailedToConnect.Stop();
-                }
+                Server.Start();
+                if (!tmrFailedToConnect.Enabled)
+                    tmrFailedToConnect.Start();
                 else
                 {
-                    if (!tmrFailedToConnect.Enabled)
-                    {
-                        tmrFailedToConnect.Start();
-                    }
-                    else
-                    {
-                        tmrFailedToConnect.Stop();
-                        tmrFailedToConnect.Start();
-                    }
-
-                    lblStatus.Text = "Failed to Start!";
+                    tmrFailedToConnect.Stop();
+                    tmrFailedToConnect.Start();
                 }
+
+                lblStatus.Text = "Starting...";
             }
         }
 
@@ -280,40 +312,12 @@ namespace ConvocationServer
             return dgv;
         }
 
-        private void DgvMessages_CellContextMenuStripNeeded(object sender, DataGridViewCellContextMenuStripNeededEventArgs e)
+        public void AddMessage(string message, string title, string direction, string timestamp = null)
         {
-            dgvMessages.ClearSelection();
-            int rowSelected = e.RowIndex;
-            if (e.RowIndex != -1)
-            {
-                dgvMessages.Rows[rowSelected].Selected = true;
-            }
-            e.ContextMenuStrip = ctxMenuStripMessageData;
-        }
+            if (timestamp == null)
+                timestamp = DateTime.Now.ToString();
 
-        private void ToolStripMenuItemDetailedView_Click(object sender, EventArgs e)
-        {
-            if (dgvMessages.SelectedRows.Count == 0) return;
-
-            if (LstForms[1].IsDisposed)
-            {
-                LstForms[1] = new FrmMessageData();
-            }
-            FrmMessageData frm = (FrmMessageData)LstForms[1];
-            DataGridViewRow row = dgvMessages.SelectedRows[0];
-
-            if (frm == null || row.Cells.Count != 3) return;
-
-            object message = row.Cells[0].Value;
-            object direction = row.Cells[1].Value;
-            object timestamp = row.Cells[2].Value;
-            frm.SetData(
-                message?.ToString(),
-                direction?.ToString(),
-                timestamp?.ToString()
-            );
-            frm.Show();
-            frm.BringToFront();
+            TblMessages.Rows.Add(message, title, direction, timestamp);
         }
     }
 }
