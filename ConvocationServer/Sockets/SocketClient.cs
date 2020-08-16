@@ -11,7 +11,6 @@ namespace ConvocationServer.Sockets
 
     class SocketClient
     {
-        private List<string> Services;
         private FrmServer _parent;
         public IWebSocketConnection Socket { get; set; }
         public string UserName { get; set; }
@@ -25,13 +24,6 @@ namespace ConvocationServer.Sockets
             UserName = string.Empty;
             Password = string.Empty;
             LoggedIn = false;
-            // Join user to default services
-            Services = new List<string>()
-            {
-                "server",
-                "status",
-                "relay"
-            };
         }
 
         public void SetUserData(string userName, string password)
@@ -54,8 +46,7 @@ namespace ConvocationServer.Sockets
                                 { "type", "login" },
                                 { "message", $"Logged in as user: {this.UserName}" }
                             } }
-                        },
-                        isListening: false);
+                        });
         }
 
         public void LogOut(bool sendMessage = true)
@@ -74,106 +65,19 @@ namespace ConvocationServer.Sockets
                                     { "type", "logout" },
                                     { "message", $"Logged out as user: {_oldUser}" }
                                 } }
-                            },
-                            isListening: false);
-            }
-
-            // Remove the user from services requiring a valid login
-            ResetServices(sendMessage: sendMessage);
-        }
-
-        // Return True Or False depending on if the given service is in our Services list.
-        public bool IsListeningTo(string service)
-        {
-            string _service = service.ToLower().Trim();
-
-            return Services.FindIndex(clientService => _service.Equals(clientService)) != -1;
-        }
-
-
-        public void JoinService(string service)
-        {
-            string _service = service.ToLower().Trim();
-            int index = Services.FindIndex(clientService => _service.Equals(clientService));
-            // Make sure we aren't already in this service
-            if (index == -1)
-            {
-                Services.Add(_service);
-                // Send out confirmation message
-                SendMessage(message: new JObject {
-                                { "service", "status" },
-                                { "data", new JObject {
-                                    { "type", "joined" },
-                                    { "message", $"Service: {_service}" }
-                                } }
-                            },
-                            isListening: false);
+                            });
             }
         }
 
-
-        public void LeaveService(string service, bool sendMessage = true)
-        {
-            string _service = service.ToLower().Trim();
-
-            // Prevent leaving the core default services
-            if (service.Equals("server") || service.Equals("status") || service.Equals("relay"))
-                return;
-
-            int index = Services.FindIndex(clientService => _service.Equals(clientService));
-            // Make sure we are already in this service
-            if (index != -1)
-            {
-                Services.RemoveAt(index);
-                if (sendMessage)
-                {
-                    // Send out confirmation message
-                    SendMessage(message: new JObject {
-                                    { "service", "status" },
-                                    { "data", new JObject {
-                                        { "type", "left" },
-                                        { "message", $"Service: {_service}" }
-                                    } }
-                                },
-                                isListening: false);
-                }
-            }
-        }
-
-        public void ResetServices(bool sendMessage = true)
-        {
-            // Use a temp list to avoid errors when removing items from the list while iterating through it.
-            List<string> _services = new List<string>(Services);
-            // Reset service list to default
-            _services.ForEach(service =>
-            {
-                if (!service.Equals("server") && !service.Equals("status") && !service.Equals("relay"))
-                    LeaveService(service: service, sendMessage: sendMessage);
-            });
-        }
-
-        public void LeaveAllServices()
-        {
-            // Use a temp list to avoid errors when removing items from the list while iterating through it.
-            List<string> _services = new List<string>(Services);
-            // Clear service list to default
-            _services.ForEach(service => LeaveService(service: service, sendMessage: false));
-        }
-
-
-        public void SendMessage(JObject message, bool isListening = true)
+        public void SendMessage(JObject message)
         {
             try
             {
                 if (message != null && message["service"] != null)
                 {
-                    // Make sure the client is listening to the service for this message unless disabled
-                    if (!isListening || IsListeningTo(message["service"].ToString()))
-                    {
-                        string _msg = JsonConvert.SerializeObject(message);
-                        Socket.Send(_msg);
-                        _parent.AddMessage(_msg, $"{message["service"]} Response", "Outgoing");
-                    }
+                    string _msg = JsonConvert.SerializeObject(message);
+                    Socket.Send(_msg);
+                    _parent.AddMessage(_msg, $"{message["service"]} Response", "Outgoing");
                 }
             }
             catch (Exception e) { Console.Error.WriteLine(e); };
@@ -184,6 +88,9 @@ namespace ConvocationServer.Sockets
         {
             try
             {
+                // Only send XPN responses to the user if they are logged in
+                if (!LoggedIn) return;
+
                 if (!string.IsNullOrEmpty(category) && !string.IsNullOrEmpty(action) && !string.IsNullOrEmpty(value.ToString()))
                 {
                     SendMessage(message: new JObject {
@@ -193,7 +100,7 @@ namespace ConvocationServer.Sockets
                                         { "action", action },
                                         { "value", value },
                                     }}
-                                }, isListening: false);
+                                });
                 }
                 else
                 {
@@ -213,7 +120,7 @@ namespace ConvocationServer.Sockets
                                         { "action", "error" },
                                         { "value", _message.ReplaceLastOccurrence(", ", string.Empty) + "!" },
                                     }}
-                                }, isListening: false);
+                                });
                 }
             }
             catch (Exception e)
@@ -237,6 +144,9 @@ namespace ConvocationServer.Sockets
             {
                 void OnClockChange(int Hours, int Minutes, int Seconds, int Milli)
                 {
+                    // Only send XPN responses to the user if they are logged in
+                    if (!LoggedIn) return;
+
                     // Send out message on the ClockChange event
                     SendMessage(message: new JObject {
                                     { "service", "relay" },

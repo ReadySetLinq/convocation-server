@@ -49,6 +49,7 @@ namespace ConvocationServer.Sockets
             {
                 IsBackground = true
             };
+            _threadingServer.Start();
         }
 
         public void Stop()
@@ -174,10 +175,7 @@ namespace ConvocationServer.Sockets
 
             int index = Clients.FindIndex(client => client.Socket == conn);
             if (index != -1)
-            {
-                Clients[index].LeaveAllServices();
                 Clients.RemoveAt(index);
-            }
         }
 
         private void OnMessage(IWebSocketConnection conn, string message)
@@ -199,8 +197,7 @@ namespace ConvocationServer.Sockets
                                                             { "type", "error" },
                                                             { "message", $"Invalid message" }
                                                         } }
-                                                    },
-                                            isListening: false);
+                                                    });
                     }
                     SocketMessage sMessage = _msgObj.ToObject<SocketMessage>();
 
@@ -213,7 +210,7 @@ namespace ConvocationServer.Sockets
                             // Xpression
                             case "xpression":
                                 // Example: {"service": "xpression", "data": {"category": "takeitem", "action": "GetTakeItemStatus", "properties": {"takeID": 1 }} }
-                                if (_client.LoggedIn && _client.IsListeningTo("xpression"))
+                                if (_client.LoggedIn)
                                 {
                                     sData = sMessage.Data.ToObject<XpressionService>();
                                     XPN_Events.Execute(XPN: XpnFunctions, client: _client, data: sData);
@@ -226,8 +223,7 @@ namespace ConvocationServer.Sockets
                                                                         { "type", "error" },
                                                                         { "message", $"You must be logged in and listening to the service: {sMessage.Service}" }
                                                                     } }
-                                                                },
-                                                        isListening: false);
+                                                                });
                                 }
                                 break;
 
@@ -253,8 +249,7 @@ namespace ConvocationServer.Sockets
                                                                         { "type", "error" },
                                                                         { "message", "Invalid status type!" }
                                                                     } }
-                                                                },
-                                                        isListening: false);
+                                                                });
                                 }
                                 break;
 
@@ -272,8 +267,7 @@ namespace ConvocationServer.Sockets
                                                                         { "type", "error" },
                                                                         { "message", "Incorrect username or password!" }
                                                                     } }
-                                                                },
-                                                        isListening: false);
+                                                                });
                                 }
 
                                 break;
@@ -295,59 +289,7 @@ namespace ConvocationServer.Sockets
                                                                         { "type", "error" },
                                                                         { "message", "No login detected!" }
                                                                     } }
-                                                                },
-                                                        isListening: false);
-                                }
-                                break;
-
-                            case "join":
-                                // Example: {"service": "join", "data": {"name": "chat"} }
-                                if (_client.LoggedIn)
-                                {
-                                    sData = sMessage.Data.ToObject<JoinLeaveService>();
-                                    if (sData.Name != null && sData.Name.Length > 0)
-                                    {
-                                        // Set the service to the channels listening list
-                                        _client.JoinService(service: sData.Name);
-                                    }
-                                }
-                                else
-                                {
-                                    _client.SendMessage(message: new JObject {
-                                                                    { "service", "status" },
-                                                                    { "data", new JObject {
-                                                                        { "type", "error" },
-                                                                        { "message", "You must be logged in before joining a service!" }
-                                                                    } }
-                                                                },
-                                                        isListening: false);
-                                }
-                                break;
-
-                            case "leave":
-                                // Example: {"service": "leave", "data": {"name": "chat"} }
-                                if (_client.LoggedIn)
-                                {
-                                    sData = sMessage.Data.ToObject<JoinLeaveService>();
-                                    if (sData.Name != null && sData.Name.Length > 0)
-                                    {
-                                        // Do not allow leaving the defalt services
-                                        if (sData.Name.Equals("server") || sData.Name.Equals("status") || sData.Name.Equals("relay")) return;
-
-                                        // Remove the service from the channels listening list
-                                        _client.LeaveService(service: sData.Name);
-                                    }
-                                }
-                                else
-                                {
-                                    _client.SendMessage(message: new JObject {
-                                                                    { "service", "status" },
-                                                                    { "data", new JObject {
-                                                                        { "type", "error" },
-                                                                        { "message", "You must be logged in before leaving a service!" }
-                                                                    } }
-                                                                },
-                                                        isListening: false);
+                                                                });
                                 }
                                 break;
                         }
