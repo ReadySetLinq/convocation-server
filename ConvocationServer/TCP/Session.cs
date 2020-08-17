@@ -1,25 +1,26 @@
 using System;
-using System.Collections.Generic;
-using Fleck;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using ConvocationServer.Extensions;
 using ConvocationServer.XPN;
+using System.Net.Sockets;
+using System.Text;
 
-namespace ConvocationServer.Sockets
+namespace ConvocationServer.TCP
 {
-
-    class SocketClient
+    class Session
     {
         private FrmServer _parent;
-        public IWebSocketConnection Socket { get; set; }
+
         public string UserName { get; set; }
         public string Password { get; set; }
         public bool LoggedIn { get; set; }
+        public TcpClient TcpClient { get; }
+        public Socket TcpSocket { get => TcpClient.Client; }
 
-        public SocketClient(IWebSocketConnection socket, FrmServer parent)
+        public Session(TcpClient client, FrmServer parent)
         {
-            Socket = socket;
+            TcpClient = client;
             _parent = parent;
             UserName = string.Empty;
             Password = string.Empty;
@@ -32,6 +33,20 @@ namespace ConvocationServer.Sockets
                 UserName = userName;
             if (password != string.Empty && password.Trim().Length > 0)
                 Password = password;
+        }
+
+        public void SendMessage(JObject message)
+        {
+            try
+            {
+                if (message != null && message["service"] != null)
+                {
+                    string _msg = JsonConvert.SerializeObject(message);
+                    TcpSocket.Send(Encoding.ASCII.GetBytes(_msg));
+                    _parent.AddMessage(message, $"{message["service"]} Response", "Outgoing");
+                }
+            }
+            catch (Exception e) { Console.Error.WriteLine(e); };
         }
 
         public void LogIn(string userName, string password)
@@ -69,21 +84,7 @@ namespace ConvocationServer.Sockets
             }
         }
 
-        public void SendMessage(JObject message)
-        {
-            try
-            {
-                if (message != null && message["service"] != null)
-                {
-                    string _msg = JsonConvert.SerializeObject(message);
-                    Socket.Send(_msg);
-                    _parent.AddMessage(_msg, $"{message["service"]} Response", "Outgoing");
-                }
-            }
-            catch (Exception e) { Console.Error.WriteLine(e); };
-        }
-
-        // * Send a websocket message out with data based on a Xpression request
+        // * Send a message out with data based on a Xpression request
         public void SendXpressionResponse(string category, string action, dynamic value)
         {
             try

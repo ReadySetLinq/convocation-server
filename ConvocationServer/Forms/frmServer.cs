@@ -3,15 +3,16 @@ using System.Collections.Generic;
 using System.Data;
 using System.Windows.Forms;
 using ConvocationServer.Forms;
-using ConvocationServer.Sockets;
+using ConvocationServer.TCP;
 using ConvocationServer.Storage;
+using Newtonsoft.Json.Linq;
 
 namespace ConvocationServer
 {
     public partial class FrmServer : Form
     {
         private readonly List<Form> LstForms;
-        private readonly SocketServer Server;
+        private readonly Server Server;
         private readonly System.Timers.Timer tmrFailedToConnect = new System.Timers.Timer
         {
             Interval = 5000,
@@ -48,7 +49,7 @@ namespace ConvocationServer
                // Users Manager = Index 2
                new FrmUsers(this),
             };
-            Server = new SocketServer(this);
+            Server = new Server(this);
 
             notifyIcon.BalloonTipTitle = "RSL - Server";
             notifyIcon.BalloonTipText = "Double click to open!";
@@ -89,12 +90,19 @@ namespace ConvocationServer
             Label lbl = lblStatus;
             ToolStripMenuItem statusItem = statusStripMenuItem;
 
-            if (lbl.Text == "Started")
+            if (lbl.Text.StartsWith("Starting"))
+            {
+                lbl.ForeColor = System.Drawing.Color.Yellow;
+                statusItem.Text = "Stop";
+                connectToolStripMenuItem.Text = "Stop";
+            }
+            else if (lbl.Text.Equals("Running"))
             {
                 lbl.ForeColor = System.Drawing.Color.YellowGreen;
                 statusItem.Text = "Stop";
                 connectToolStripMenuItem.Text = "Stop";
-            } else
+            }
+            else
             {
                 lbl.ForeColor = System.Drawing.Color.OrangeRed;
                 statusItem.Text = "Start";
@@ -155,9 +163,9 @@ namespace ConvocationServer
             lblStatus.Invoke((MethodInvoker)delegate {
                 // Running on the UI thread
                 if (Server.IsConnected)
-                    lblStatus.Text = "Stop";
+                    lblStatus.Text = "Running";
                 else
-                    lblStatus.Text = "Start";
+                    lblStatus.Text = "Stopped";
             });
 
         }
@@ -240,7 +248,7 @@ namespace ConvocationServer
             FrmMessageData frm = (FrmMessageData)LstForms[1];
             DataGridViewRow row = dgvMessages.SelectedRows[0];
 
-            if (frm == null || row.Cells.Count != 3) return;
+            if (frm == null || row.Cells.Count != 4) return;
 
             object message = row.Cells[0].Value;
             object direction = row.Cells[2].Value;
@@ -317,7 +325,21 @@ namespace ConvocationServer
             if (timestamp == null)
                 timestamp = DateTime.Now.ToString();
 
-            TblMessages.Rows.Add(message, title, direction, timestamp);
+            lblStatus.Invoke((MethodInvoker)delegate {
+                // Running on the UI thread
+                TblMessages.Rows.Add(message, title, direction, timestamp);
+            });
+        }
+
+        public void AddMessage(JObject message, string title, string direction, string timestamp = null)
+        {
+            if (timestamp == null)
+                timestamp = DateTime.Now.ToString();
+
+            lblStatus.Invoke((MethodInvoker)delegate {
+                // Running on the UI thread
+                TblMessages.Rows.Add(message, title, direction, timestamp);
+            });
         }
     }
 }

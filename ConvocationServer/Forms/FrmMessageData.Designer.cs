@@ -107,7 +107,7 @@
             // 
             // txtMessage
             // 
-            this.txtMessage.BackColor = System.Drawing.Color.DimGray;
+            this.txtMessage.BackColor = System.Drawing.Color.Black;
             this.txtMessage.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtMessage.Dock = System.Windows.Forms.DockStyle.Top;
             this.txtMessage.ForeColor = System.Drawing.Color.WhiteSmoke;

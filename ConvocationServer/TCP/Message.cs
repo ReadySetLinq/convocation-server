@@ -2,7 +2,7 @@
 using System;
 using Newtonsoft.Json.Linq;
 
-namespace ConvocationServer.Sockets
+namespace ConvocationServer.TCP
 {
     [AttributeUsage(AttributeTargets.Property,
                     Inherited = false,
@@ -12,7 +12,7 @@ namespace ConvocationServer.Sockets
     }
 
 
-    public class SocketMessage
+    public class Message
     {
 
         public string Service { get; set; }
