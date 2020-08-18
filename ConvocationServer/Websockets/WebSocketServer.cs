@@ -16,22 +16,20 @@ namespace ConvocationServer.Websockets
     public class WebSocketServer
     {
         private readonly FrmServer parent;
+        private TcpListener server;
         private readonly XPN_Functions XpnFunctions = new XPN_Functions();
-        public readonly List<WebSocketSession> Clients = new List<WebSocketSession>();
 
+        public readonly List<WebSocketSession> Clients = new List<WebSocketSession>();
         public event EventHandler<WebSocketSession> ClientConnected;
         public event EventHandler<WebSocketSession> ClientDisconnected;
 
-        public bool IsListening { get; private set; }
+        public bool IsListening { get; private set; } = false;
 
         public WebSocketServer(FrmServer serverForm)
         {
             parent = serverForm;
-            IsListening = false;
         }
-
-        public void Stop() => IsListening = false;
-
+        
         public void Start()
         {
             if (IsListening) return;
@@ -55,46 +53,57 @@ namespace ConvocationServer.Websockets
                 DialogResult response = MessageBox.Show("Make sure Xpression is running before starting the server!", "Failed to connect with Xpression",
                                 MessageBoxButtons.OK,
                                 MessageBoxIcon.Error);
-                parent.StopTimer();
                 parent.UpdateStatus("Stopped");
                 return;
             }
 
-            IsListening = true;
-            TcpListener server = new TcpListener(IPAddress.Parse(address), Convert.ToInt32(port));
+            server = new TcpListener(IPAddress.Parse(address), Convert.ToInt32(port));
             server.Start();
 
             JObject message = new JObject { { "IP", address }, { "Port", port } };
             parent.AddMessage(message, "Server Started", "Outgoing");
+            parent.UpdateStatus("Running");
+            IsListening = true;
 
             ThreadPool.QueueUserWorkItem(_ =>
             {
                 while (IsListening)
                 {
-                    WebSocketSession session = new WebSocketSession(server.AcceptTcpClient(), parent);
-                    session.HandshakeCompleted += (__, ___) =>
+                    try
                     {
-                        Client_Connected(session);
-                    };
+                        WebSocketSession session = new WebSocketSession(server.AcceptTcpClient(), parent);
+                        session.HandshakeCompleted += (__, ___) =>
+                        {
+                            Client_Connected(session);
+                        };
 
-                    session.Disconnected += (__, ___) =>
-                    {
-                        Client_Disconnected(session);
-                    };
+                        session.Disconnected += (__, ___) =>
+                        {
+                            Client_Disconnected(session);
+                        };
 
-                    session.TextMessageReceived += (__, ___) =>
-                    {
+                        session.TextMessageReceived += (__, ___) =>
+                        {
                         // __ = WebSocketSession
                         // ___ = message
                         Client_TextMessageReceived(session, ___);
-                    };
-                    ClientConnected?.Invoke(this, session);
-                    session.Start();
+                        };
+                        ClientConnected?.Invoke(this, session);
+                        session.Start();
+                    } catch { }
                 }
-
-                parent.AddMessage(message, "Server Stopped", "Outgoing");
-                server.Stop();
             });
+        }
+        public void Stop()
+        {
+            JObject message = new JObject { 
+                { "IP", parent.StorageSettings.IPAddress.Trim() }, 
+                { "Port", parent.StorageSettings.Port } 
+            };
+            parent.AddMessage(message, "Server Stopped", "Outgoing");
+            server.Stop();
+            parent.UpdateStatus("Stopped");
+            IsListening = false;
         }
 
         public void SendTo(WebSocketSession session, JObject message)
