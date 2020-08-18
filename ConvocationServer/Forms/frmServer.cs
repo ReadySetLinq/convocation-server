@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Windows.Forms;
 using ConvocationServer.Forms;
-using ConvocationServer.TCP;
+using ConvocationServer.Websockets;
 using ConvocationServer.Storage;
 using Newtonsoft.Json.Linq;
 
@@ -12,8 +12,8 @@ namespace ConvocationServer
     public partial class FrmServer : Form
     {
         private readonly List<Form> LstForms;
-        private readonly Server Server;
-        private readonly System.Timers.Timer tmrFailedToConnect = new System.Timers.Timer
+        private readonly WebSocketServer Server;
+        private readonly System.Timers.Timer tmrConnect = new System.Timers.Timer
         {
             Interval = 5000,
             AutoReset = false
@@ -22,14 +22,13 @@ namespace ConvocationServer
         public DataTable TblMessages = new DataTable();
         public Settings StorageSettings = new Settings();
 
-
         public FrmServer()
         {
             InitializeComponent();
 
             Text += " v" + Application.ProductVersion;
             lblStatus.Text = "Stopped";
-            tmrFailedToConnect.Elapsed += OnFailedToOpenEvent;
+            tmrConnect.Elapsed += OnFailedToOpenEvent;
             TblMessages.Columns.Add("Message", typeof(string));
             TblMessages.Columns.Add("Title", typeof(string));
             TblMessages.Columns.Add("Direction", typeof(string));
@@ -49,7 +48,7 @@ namespace ConvocationServer
                // Users Manager = Index 2
                new FrmUsers(this),
             };
-            Server = new Server(this);
+            Server = new WebSocketServer(this);
 
             notifyIcon.BalloonTipTitle = "RSL - Server";
             notifyIcon.BalloonTipText = "Double click to open!";
@@ -85,12 +84,22 @@ namespace ConvocationServer
             }
         }
 
+        public void UpdateStatus(string status)
+        {
+            // Update the status label on the UI
+            lblStatus.Invoke((MethodInvoker)delegate {
+                // Running on the UI thread
+                lblStatus.Text = status;
+            });
+
+        }
+
         private void LblStatus_TextChanged(object sender, EventArgs e)
         {
             Label lbl = lblStatus;
             ToolStripMenuItem statusItem = statusStripMenuItem;
 
-            if (lbl.Text.StartsWith("Starting"))
+            if (lbl.Text.Equals("Starting..."))
             {
                 lbl.ForeColor = System.Drawing.Color.Yellow;
                 statusItem.Text = "Stop";
@@ -159,14 +168,10 @@ namespace ConvocationServer
 
         private void OnFailedToOpenEvent(Object source, System.Timers.ElapsedEventArgs e)
         {
-            // Reset to status to Stopped
-            lblStatus.Invoke((MethodInvoker)delegate {
-                // Running on the UI thread
-                if (Server.IsConnected)
-                    lblStatus.Text = "Running";
-                else
-                    lblStatus.Text = "Stopped";
-            });
+            if (Server.IsListening)
+                UpdateStatus("Running");
+            else
+                UpdateStatus("Stopped");
 
         }
 
@@ -251,10 +256,12 @@ namespace ConvocationServer
             if (frm == null || row.Cells.Count != 4) return;
 
             object message = row.Cells[0].Value;
+            object title = row.Cells[1].Value;
             object direction = row.Cells[2].Value;
             object timestamp = row.Cells[3].Value;
             frm.SetData(
                 message?.ToString(),
+                title?.ToString(),
                 direction?.ToString(),
                 timestamp?.ToString()
             );
@@ -268,25 +275,30 @@ namespace ConvocationServer
             Application.Exit();
         }
 
+        public void StopTimer()
+        {
+            if (tmrConnect.Enabled)
+                tmrConnect.Stop();
+        }
+
         private void ToggleServer()
         {
-            if (Server.IsConnected)
+            if (Server.IsListening)
             {
                 Server.Stop();
-                lblStatus.Text = "Stopped";
+                UpdateStatus("Stopped");
             }
             else
             {
-                Server.Start();
-                if (!tmrFailedToConnect.Enabled)
-                    tmrFailedToConnect.Start();
+                if (!tmrConnect.Enabled)
+                    tmrConnect.Start();
                 else
                 {
-                    tmrFailedToConnect.Stop();
-                    tmrFailedToConnect.Start();
+                    StopTimer();
+                    tmrConnect.Start();
                 }
-
-                lblStatus.Text = "Starting...";
+                UpdateStatus("Starting...");
+                Server.Start();
             }
         }
 
@@ -325,7 +337,7 @@ namespace ConvocationServer
             if (timestamp == null)
                 timestamp = DateTime.Now.ToString();
 
-            lblStatus.Invoke((MethodInvoker)delegate {
+            dgvMessages.Invoke((MethodInvoker)delegate {
                 // Running on the UI thread
                 TblMessages.Rows.Add(message, title, direction, timestamp);
             });
@@ -336,9 +348,10 @@ namespace ConvocationServer
             if (timestamp == null)
                 timestamp = DateTime.Now.ToString();
 
-            lblStatus.Invoke((MethodInvoker)delegate {
+            dgvMessages.Invoke((MethodInvoker)delegate {
                 // Running on the UI thread
                 TblMessages.Rows.Add(message, title, direction, timestamp);
+                dgvMessages.FirstDisplayedScrollingRowIndex = dgvMessages.RowCount - 1;
             });
         }
     }

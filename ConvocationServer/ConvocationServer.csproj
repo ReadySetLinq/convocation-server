@@ -123,11 +123,11 @@
     <Compile Include="Globals.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TCP\Session.cs" />
-    <Compile Include="TCP\Message.cs" />
-    <Compile Include="TCP\Server.cs" />
+    <Compile Include="Websockets\Message.cs" />
     <Compile Include="Storage\Account.cs" />
     <Compile Include="Storage\Settings.cs" />
+    <Compile Include="Websockets\WebSocketServer.cs" />
+    <Compile Include="Websockets\WebSocketSession.cs" />
     <Compile Include="XPN\XPNTakeItem.cs" />
     <Compile Include="XPN\XPN_Events.cs" />
     <Compile Include="XPN\XPN_Functions.cs" />

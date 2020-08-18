@@ -1,101 +1,111 @@
-﻿using System;
+﻿using ConvocationServer.Extensions;
+using ConvocationServer.XPN;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
-using System.Threading.Tasks;
-using ConvocationServer.Extensions;
-using ConvocationServer.XPN;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using SimpleTCP;
+using System.Threading;
+using System.Windows.Forms;
 
-namespace ConvocationServer.TCP
+namespace ConvocationServer.Websockets
 {
-    class Server
+    public class WebSocketServer
     {
         private readonly FrmServer parent;
         private readonly XPN_Functions XpnFunctions = new XPN_Functions();
+        public readonly List<WebSocketSession> Clients = new List<WebSocketSession>();
 
-        private SimpleTcpServer server = null;
-        private List<Session> Sessions = new List<Session>();
+        public event EventHandler<WebSocketSession> ClientConnected;
+        public event EventHandler<WebSocketSession> ClientDisconnected;
 
-        public bool IsConnected { get; set; }
+        public bool IsListening { get; private set; }
 
-        public Server(FrmServer serverForm) 
+        public WebSocketServer(FrmServer serverForm)
         {
             parent = serverForm;
-            IsConnected = false;
+            IsListening = false;
         }
 
-        ~Server()
-        {
-            if (server != null)
-            {
-                server.Stop();
-                server = null;
-            }
-        }
+        public void Stop() => IsListening = false;
 
         public void Start()
         {
-            if (server != null) return;
+            if (IsListening) return;
 
             string address = parent.StorageSettings.IPAddress.Trim();
             int port = parent.StorageSettings.Port;
 
-            if (address.Length == 0 || port <= 0) return;
-
-            Sessions = new List<Session>();
-            server = new SimpleTcpServer
+            if (address.Length == 0 || port <= 0)
             {
-                Delimiter = 0x13, // enter
-                StringEncoder = Encoding.ASCII,
-            };
-            server.DataReceived += Server_DataReceived;
-            server.ClientConnected += Client_Connected;
-            server.ClientDisconnected += Client_Disconnected;
-            server.Start(IPAddress.Parse(address), Convert.ToInt32(port));
+                parent.UpdateStatus("Settings Error");
+                MessageBox.Show("You must select a valid IP and Port!", "Invalid connection settings",
+                                MessageBoxButtons.OK,
+                                MessageBoxIcon.Error);
+                return;
+            }
 
-            JObject message = new JObject { { "IP", address },  { "Port", port } };
-            parent.AddMessage(message, "Server Started!", "Outgoing");
-            IsConnected = true;
-        }
-
-        public void Stop()
-        {
-            // *  Send all connections a shutdown message
-            JObject message = new JObject
+            // Make sure Xpression is started and linked before running the server
+            if (!XpnFunctions.Start())
             {
-                { "service", "server" },
-                { "data", new JObject {
-                    { "message", "shutdown" }
-                }}
-            };
+                parent.UpdateStatus("Xpression Error");
+                DialogResult response = MessageBox.Show("Make sure Xpression is running before starting the server!", "Failed to connect with Xpression",
+                                MessageBoxButtons.OK,
+                                MessageBoxIcon.Error);
+                parent.StopTimer();
+                parent.UpdateStatus("Stopped");
+                return;
+            }
 
-            SendToAll(message: message, verifyLogin: false, addLog: false);
-            parent.AddMessage(message, "Server Shutdown", "Outgoing");
+            IsListening = true;
+            TcpListener server = new TcpListener(IPAddress.Parse(address), Convert.ToInt32(port));
+            server.Start();
 
-            // Wait 3 seconds to make sure all clients get the shutdown message
-            Task.Delay(new TimeSpan(0, 0, 3)).ContinueWith((task) => {
+            JObject message = new JObject { { "IP", address }, { "Port", port } };
+            parent.AddMessage(message, "Server Started", "Outgoing");
+
+            ThreadPool.QueueUserWorkItem(_ =>
+            {
+                while (IsListening)
+                {
+                    WebSocketSession session = new WebSocketSession(server.AcceptTcpClient(), parent);
+                    session.HandshakeCompleted += (__, ___) =>
+                    {
+                        Client_Connected(session);
+                    };
+
+                    session.Disconnected += (__, ___) =>
+                    {
+                        Client_Disconnected(session);
+                    };
+
+                    session.TextMessageReceived += (__, ___) =>
+                    {
+                        // __ = WebSocketSession
+                        // ___ = message
+                        Client_TextMessageReceived(session, ___);
+                    };
+                    ClientConnected?.Invoke(this, session);
+                    session.Start();
+                }
+
+                parent.AddMessage(message, "Server Stopped", "Outgoing");
                 server.Stop();
-                server = null;
-                IsConnected = false;
             });
         }
 
-        public void SendTo(Socket socket, JObject message)
+        public void SendTo(WebSocketSession session, JObject message)
         {
             try
             {
-                if (server == null || !server.IsStarted) return;
-                if (!IsConnected) return;
+                if (!IsListening) return;
 
                 if (message != null && message["service"] != null)
                 {
-                    string _msg = JsonConvert.SerializeObject(message);
-                    socket.Send(Encoding.ASCII.GetBytes(_msg));
+                    session.SendMessage(message);
                     parent.AddMessage(message, $"{message["service"]} Message", "Outgoing");
                 }
             }
@@ -110,31 +120,23 @@ namespace ConvocationServer.TCP
         {
             try
             {
-                if (server == null || !server.IsStarted) return;
-                if (!IsConnected) return;
+                if (!IsListening) return;
 
                 if (message != null && message["service"] != null)
                 {
                     string _msg = JsonConvert.SerializeObject(message);
-                    if (verifyLogin)
+                    // Loop through all connections
+                    foreach (WebSocketSession session in Clients)
                     {
-                        // Loop through all connections
-                        foreach (Session session in Sessions)
+                        // Only send out messages to verified connections
+                        if (!verifyLogin || session.LoggedIn)
                         {
-                            // Only send out messages to verified connections
-                            if (session.LoggedIn == true)
-                            {
-                                session.TcpSocket.Send(Encoding.ASCII.GetBytes(_msg));
-                            }
+                            session.SendMessage(_msg);
                         }
-                    } else
-                    {
-                        // Send to everyone
-                        server.Broadcast(Encoding.ASCII.GetBytes(_msg));
                     }
-                    if (addLog)
-                        parent.AddMessage(message, $"{message["service"]} Message", "Outgoing");
                 }
+                if (addLog)
+                    parent.AddMessage(message, $"{message["service"]} Message", "Outgoing");
             }
             catch (Exception e)
             {
@@ -145,46 +147,45 @@ namespace ConvocationServer.TCP
         // Verify login information given
         private bool IsValidLogin(string userName, string password)
         {
-            return userName != null && 
-                password != null && 
+            return userName != null &&
+                password != null &&
                 parent.StorageSettings.IsValidAccountLogin(userName, password);
         }
 
         // Get a specific SocketClient based on its socket connection info ID
-        private Session GetSession(Session session)
+        private WebSocketSession GetSession(WebSocketSession session)
         {
-            return (Session)Sessions.Where(s => s.TcpClient == session.TcpClient);
+            return (WebSocketSession)Clients.Where(s => s.Id == session.Id);
         }
 
-        private void Client_Connected(object sender, TcpClient e)
+        private void Client_Connected(WebSocketSession session)
         {
-            Session _newSession = new Session(e, parent);
-            Sessions.Add(_newSession);
-            _newSession.SendMessage(message: new JObject
-                    {
-                        { "service", "server" },
-                        { "data", new JObject {
-                            { "message", "connected" }
-                        }}
-                    });
+            parent.AddMessage(JObject.FromObject(session), $"Client Connected", "Incoming");
+            Clients.Add(session);
+            session.SendMessage(message: new JObject
+                        {
+                            { "service", "server" },
+                            { "data", new JObject {
+                                { "message", "connected" }
+                            }}
+                        });
         }
 
-        private void Client_Disconnected(object sender, TcpClient e)
+        private void Client_Disconnected(WebSocketSession session)
         {
-            int index = Sessions.FindIndex(session => session.TcpClient == e);
-            if (index != -1)
-                Sessions.RemoveAt(index);
+            parent.AddMessage(JObject.FromObject(session), $"Client Disconnected", "Incoming");
+            session.LoggedIn = false;
+            Clients.Remove(session);
+
+            ClientDisconnected?.Invoke(this, session);
+            session.Dispose();
         }
 
-        private void Server_DataReceived(object sender, SimpleTCP.Message e)
+        private void Client_TextMessageReceived(WebSocketSession session, string message)
         {
-            string message = e.MessageString.Trim();
-            int clientIndex = Sessions.FindIndex(c => c.TcpClient == e.TcpClient);
-            if (clientIndex < 0) return;
             try
             {
-                Session session = Sessions[clientIndex];
-                JObject _msgObj = message.ValidateJSON();
+                JObject _msgObj = message.Trim().ValidateJSON();
                 if (_msgObj == null)
                 {
                     session.SendMessage(message: new JObject {
@@ -310,6 +311,5 @@ namespace ConvocationServer.TCP
                 parent.AddMessage(JObject.FromObject(ex), $"Error: {ex.Message}", "Incoming");
             };
         }
-
     }
 }

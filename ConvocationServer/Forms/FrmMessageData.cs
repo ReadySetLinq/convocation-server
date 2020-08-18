@@ -17,8 +17,9 @@ namespace ConvocationServer.Forms
             InitializeComponent();
         }
 
-        public void SetData(string message = "", string direction = "Unknown", string timestamp = "Unknown")
+        public void SetData(string message = "", string title = "", string direction = "Unknown", string timestamp = "Unknown")
         {
+            this.Text = $"Message Data - {title}";
             txtMessage.Text = message;
             txtDirection.Text = direction;
             txtTimestamp.Text = timestamp;

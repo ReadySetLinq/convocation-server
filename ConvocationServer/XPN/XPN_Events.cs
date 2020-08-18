@@ -1,13 +1,13 @@
 ﻿using System;
 using Newtonsoft.Json.Linq;
 using ConvocationServer.Extensions;
-using ConvocationServer.TCP;
+using ConvocationServer.Websockets;
 
 namespace ConvocationServer.XPN
 {
     class XPN_Events
     {
-        public static bool VerifyProperties(Session session, JObject serviceProps, string[] properties, bool invalidResponse = true)
+        public static bool VerifyProperties(WebSocketSession session, JObject serviceProps, string[] properties, bool invalidResponse = true)
         {
             bool wasVerified = true;
             string _message = "missing property: ";
@@ -38,7 +38,7 @@ namespace ConvocationServer.XPN
             return wasVerified;
         }
 
-        public static void Execute(FrmServer parent, XPN_Functions xpn, Session session, XpressionService data)
+        public static void Execute(FrmServer parent, XPN_Functions xpn, WebSocketSession session, XpressionService data)
         {
             try
             {
@@ -46,7 +46,7 @@ namespace ConvocationServer.XPN
                 if (!string.IsNullOrEmpty(data.Category) && !string.IsNullOrEmpty(data.Action))
                 {
                     // Do stuff with Xpression here
-                    parent.AddMessage(JObject.FromObject(data), $"{data.Action} request", "Incoming");
+                    parent.AddMessage(JObject.FromObject(data), $"{data.Action.FirstCharToUpper()} request", "Incoming");
 
                     // Make sure expression is running or the start command is being given, if not send error
                     if (xpn == null && (!data.Category.Equals("main", StringComparison.OrdinalIgnoreCase) && !data.Action.Equals("start", StringComparison.OrdinalIgnoreCase)))

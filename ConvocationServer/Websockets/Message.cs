@@ -2,7 +2,7 @@
 using System;
 using Newtonsoft.Json.Linq;
 
-namespace ConvocationServer.TCP
+namespace ConvocationServer.Websockets
 {
     [AttributeUsage(AttributeTargets.Property,
                     Inherited = false,

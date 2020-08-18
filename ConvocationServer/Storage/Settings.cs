@@ -107,7 +107,8 @@ namespace ConvocationServer.Storage
             if (account == null) return null;
 
             account.UserName = newUsername;
-            account.Password = newPassword;
+            if (!account.Password.Equals(newPassword))
+                account.Password = newPassword.Base64Encode();
             return account;
         }
 

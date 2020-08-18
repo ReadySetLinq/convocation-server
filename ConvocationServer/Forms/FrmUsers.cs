@@ -179,7 +179,7 @@ namespace ConvocationServer.Forms
             // Fill in Selected User fields
             txtUserName.Text = selectedAccount.UserName;
             // Make sure the password is only added to a text box as astricts
-            txtPassword.Text = selectedAccount.Password.AsAstricts();
+            txtPassword.Text = selectedAccount.Password;
 
             EnableSelectedUser(true);
         }

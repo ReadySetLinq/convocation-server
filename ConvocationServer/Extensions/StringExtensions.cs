@@ -91,6 +91,22 @@ namespace ConvocationServer.Extensions
             }
         }
 
+        public static bool IsBase64(this string source)
+        {
+            if (string.IsNullOrEmpty(source) || source.Length % 4 != 0
+               || source.Contains(" ") || source.Contains("\t") ||
+               source.Contains("\r") || source.Contains("\n"))
+                return false;
+
+            try
+            {
+                Convert.FromBase64String(source);
+                return true;
+            }
+            catch {}
+            return false;
+        }
+
         public static string Base64Encode(this string source)
         {
             try
@@ -116,9 +132,14 @@ namespace ConvocationServer.Extensions
             }
         }
 
-        public static string AsAstricts(this string source)
+        public static string FirstCharToUpper(this string input)
         {
-            return Regex.Replace(source, "(.)", "*");
+            switch (input)
+            {
+                case null: return input;
+                case "": return input;
+                default: return input.First().ToString().ToUpper() + input.Substring(1);
+            }
         }
     }
 }
