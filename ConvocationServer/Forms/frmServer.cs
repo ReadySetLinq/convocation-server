@@ -13,11 +13,7 @@ namespace ConvocationServer
     {
         private readonly List<Form> LstForms;
         private readonly WebSocketServer Server;
-        private readonly System.Timers.Timer tmrConnect = new System.Timers.Timer
-        {
-            Interval = 5000,
-            AutoReset = false
-        };
+        private bool msgIsScrolling = false;
 
         public DataTable TblMessages = new DataTable();
         public Settings StorageSettings = new Settings();
@@ -28,14 +24,16 @@ namespace ConvocationServer
 
             Text += " v" + Application.ProductVersion;
             lblStatus.Text = "Stopped";
-            tmrConnect.Elapsed += OnFailedToOpenEvent;
             TblMessages.Columns.Add("Message", typeof(string));
             TblMessages.Columns.Add("Title", typeof(string));
             TblMessages.Columns.Add("Direction", typeof(string));
             TblMessages.Columns.Add("Timestamp", typeof(string));
             dgvMessages.DataSource = TblMessages;
             dgvMessages.Columns[0].Visible = false;
-            
+            dgvMessages.Columns[1].FillWeight = 134.1965F;
+            dgvMessages.Columns[2].FillWeight = 55.29949F;
+            dgvMessages.Columns[3].FillWeight = 110.504F;
+
             // Load settings
             StorageSettings.Load();
 
@@ -51,12 +49,35 @@ namespace ConvocationServer
             Server = new WebSocketServer(this);
 
             notifyIcon.BalloonTipTitle = "RSL - Server";
-            notifyIcon.BalloonTipText = "Double click to open!";
+            notifyIcon.BalloonTipText = "Right click to open!";
             notifyIcon.BalloonTipIcon = ToolTipIcon.Info;
             notifyIcon.Visible = true;
 
-            // WindowState = FormWindowState.Minimized;
-            // MinimizeToTray();
+            WindowState = FormWindowState.Minimized;
+            MinimizeToTray();
+            notifyIcon.ShowBalloonTip(1000);
+        }
+
+        private void FrmServer_Resize(object sender, EventArgs e)
+        {
+            //if the form is minimized hide it from the task bar  
+            //and show the system tray icon (represented by the NotifyIcon control)  
+            if (WindowState == FormWindowState.Minimized)
+            {
+                MinimizeToTray();
+            }
+        }
+
+        private void FrmServer_Shown(object sender, EventArgs e)
+        {
+            showToolStripMenuItem.Text = "Hide";
+            ctxMenuStripNotify.Hide();
+        }
+
+        private void FrmServer_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (Server.IsListening)
+                Server.Stop();
         }
 
         private void MinimizeToTray()
@@ -71,17 +92,6 @@ namespace ConvocationServer
 
             Hide();
             showToolStripMenuItem.Text = "Show";
-            notifyIcon.ShowBalloonTip(1000);
-        }
-
-        private void FrmServer_Resize(object sender, EventArgs e)
-        {
-            //if the form is minimized hide it from the task bar  
-            //and show the system tray icon (represented by the NotifyIcon control)  
-            if (WindowState == FormWindowState.Minimized)
-            {
-                MinimizeToTray();
-            }
         }
 
         public void UpdateStatus(string status)
@@ -166,15 +176,6 @@ namespace ConvocationServer
             ToggleServer();
         }
 
-        private void OnFailedToOpenEvent(Object source, System.Timers.ElapsedEventArgs e)
-        {
-            if (Server.IsListening)
-                UpdateStatus("Running");
-            else
-                UpdateStatus("Stopped");
-
-        }
-
         private void HideWindowStripMenuItem_Click(object sender, EventArgs e)
         {
             WindowState = FormWindowState.Minimized;
@@ -214,21 +215,7 @@ namespace ConvocationServer
 
         private void CmbDataView_SelectedIndexChanged(object sender, EventArgs e)
         {
-           switch(cmbDataView.SelectedIndex)
-            {
-                case 0: // All
-                    DataViewFilter(dgvMessages, "Direction", "");
-                    break;
-                case 1: // Incoming
-                    DataViewFilter(dgvMessages, "Direction", "Incoming");
-                    break;
-                case 2: // Outgoing
-                    DataViewFilter(dgvMessages, "Direction", "Outgoing");
-                    break;
-                default: // All
-                    DataViewFilter(dgvMessages, "Direction", "");
-                    break;
-            }
+            FilterData();
         }
 
         private void DgvMessages_CellContextMenuStripNeeded(object sender, DataGridViewCellContextMenuStripNeededEventArgs e)
@@ -240,6 +227,16 @@ namespace ConvocationServer
                 dgvMessages.Rows[rowSelected].Selected = true;
             }
             e.ContextMenuStrip = ctxMenuStripMessageData;
+        }
+
+        private void DgvMessages_Scroll(object sender, ScrollEventArgs e)
+        {
+            if (dgvMessages.DisplayedRowCount(false) +
+                dgvMessages.FirstDisplayedScrollingRowIndex
+                >= dgvMessages.RowCount)
+                msgIsScrolling = false;
+            else
+                msgIsScrolling = true;
         }
 
         private void ToolStripMenuItemDetailedView_Click(object sender, EventArgs e)
@@ -275,37 +272,64 @@ namespace ConvocationServer
             Application.Exit();
         }
 
-        public void StopTimer()
-        {
-            if (tmrConnect.Enabled)
-                tmrConnect.Stop();
-        }
-
         private void ToggleServer()
         {
             if (Server.IsListening)
             {
                 Server.Stop();
-                UpdateStatus("Stopped");
             }
             else
             {
-                if (!tmrConnect.Enabled)
-                    tmrConnect.Start();
-                else
-                {
-                    StopTimer();
-                    tmrConnect.Start();
-                }
                 UpdateStatus("Starting...");
                 Server.Start();
             }
+        }
+
+        private void FilterData()
+        {
+            void filter()
+            {
+                switch (cmbDataView.SelectedIndex)
+                {
+                    case 0: // All
+                        DataViewFilter(dgvMessages, "Direction", "");
+                        break;
+                    case 1: // Incoming
+                        DataViewFilter(dgvMessages, "Direction", "Incoming");
+                        break;
+                    case 2: // Outgoing
+                        DataViewFilter(dgvMessages, "Direction", "Outgoing");
+                        break;
+                    default: // All
+                        DataViewFilter(dgvMessages, "Direction", "");
+                        break;
+                }
+            }
+
+            if (cmbDataView.InvokeRequired)
+            {
+                // Running on the UI thread
+                cmbDataView.Invoke((MethodInvoker)delegate {
+                    if (dgvMessages.InvokeRequired)
+                        dgvMessages.Invoke((MethodInvoker)delegate {
+                            // Running on the UI thread
+                            filter();
+                        });
+                    else
+                    filter();
+                });
+            } else
+            {
+                filter();
+            }
+
         }
 
         private DataGridView DataViewFilter(DataGridView dgv, string cell, string filter)
         {
             // Turn the filter lowercase and trim it once to use later
             string key = filter.ToLower().Trim();
+            bool wasScrolling = msgIsScrolling;
 
             CurrencyManager currencyManager1 = (CurrencyManager)BindingContext[dgv.DataSource];
             currencyManager1.SuspendBinding();
@@ -328,6 +352,27 @@ namespace ConvocationServer
                 }
             }
             currencyManager1.ResumeBinding();
+            msgIsScrolling = wasScrolling;
+            SelectLast(dgv);
+
+            return dgv;
+        }
+
+        private DataGridView SelectLast(DataGridView dgv)
+        {
+            // Don't auto scroll while the user is scrolling or has scrolled up
+            if (msgIsScrolling) return dgv;
+
+            for (int i = dgv.Rows.Count -1; i >= 0; i--)
+            {
+                //verify if the row is visible
+                if (dgv.Rows[i] != null && dgv.Rows[i].Visible)
+                {
+                    //move the selector for this position
+                    dgv.FirstDisplayedScrollingRowIndex = i;
+                    break;
+                }
+            }
 
             return dgv;
         }
@@ -339,7 +384,18 @@ namespace ConvocationServer
 
             dgvMessages.Invoke((MethodInvoker)delegate {
                 // Running on the UI thread
+                // Running on the UI thread
+                int selectedIndex = -1;
+                if (dgvMessages.SelectedRows.Count > 0)
+                    selectedIndex = dgvMessages.SelectedRows[0].Index;
+
+                bool wasScrolling = msgIsScrolling;
                 TblMessages.Rows.Add(message, title, direction, timestamp);
+                msgIsScrolling = wasScrolling;
+                FilterData();
+
+                if (selectedIndex != -1)
+                    dgvMessages.Rows[selectedIndex].Selected = true;
             });
         }
 
@@ -350,8 +406,17 @@ namespace ConvocationServer
 
             dgvMessages.Invoke((MethodInvoker)delegate {
                 // Running on the UI thread
+                int selectedIndex = -1;
+                if (dgvMessages.SelectedRows.Count > 0)
+                    selectedIndex = dgvMessages.SelectedRows[0].Index;
+
+                bool wasScrolling = msgIsScrolling;
                 TblMessages.Rows.Add(message, title, direction, timestamp);
-                dgvMessages.FirstDisplayedScrollingRowIndex = dgvMessages.RowCount - 1;
+                msgIsScrolling = wasScrolling;
+                FilterData();
+
+                if (selectedIndex != -1)
+                    dgvMessages.Rows[selectedIndex].Selected = true;
             });
         }
     }
