@@ -31,36 +31,40 @@
             this.btnCancel = new System.Windows.Forms.Button();
             this.btnSave = new System.Windows.Forms.Button();
             this.groupNetwork = new System.Windows.Forms.GroupBox();
+            this.cmbIP = new System.Windows.Forms.ComboBox();
             this.numPort = new System.Windows.Forms.NumericUpDown();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
-            this.cmbIP = new System.Windows.Forms.ComboBox();
             this.groupNetwork.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numPort)).BeginInit();
             this.SuspendLayout();
             // 
             // btnCancel
             // 
+            this.btnCancel.BackColor = System.Drawing.SystemColors.Control;
             this.btnCancel.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnCancel.ForeColor = System.Drawing.Color.Black;
-            this.btnCancel.Location = new System.Drawing.Point(240, 122);
+            this.btnCancel.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.btnCancel.Location = new System.Drawing.Point(180, 99);
+            this.btnCancel.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.btnCancel.Name = "btnCancel";
-            this.btnCancel.Size = new System.Drawing.Size(109, 35);
+            this.btnCancel.Size = new System.Drawing.Size(82, 28);
             this.btnCancel.TabIndex = 5;
             this.btnCancel.Text = "Close";
-            this.btnCancel.UseVisualStyleBackColor = true;
+            this.btnCancel.UseVisualStyleBackColor = false;
             this.btnCancel.Click += new System.EventHandler(this.BtnClose_Click);
             // 
             // btnSave
             // 
+            this.btnSave.BackColor = System.Drawing.SystemColors.Control;
             this.btnSave.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnSave.ForeColor = System.Drawing.Color.Black;
-            this.btnSave.Location = new System.Drawing.Point(12, 122);
+            this.btnSave.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.btnSave.Location = new System.Drawing.Point(9, 99);
+            this.btnSave.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.btnSave.Name = "btnSave";
-            this.btnSave.Size = new System.Drawing.Size(109, 35);
+            this.btnSave.Size = new System.Drawing.Size(82, 28);
             this.btnSave.TabIndex = 4;
             this.btnSave.Text = "Save";
-            this.btnSave.UseVisualStyleBackColor = true;
+            this.btnSave.UseVisualStyleBackColor = false;
             this.btnSave.Click += new System.EventHandler(this.BtnSave_Click);
             // 
             // groupNetwork
@@ -73,22 +77,34 @@
             this.groupNetwork.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupNetwork.ForeColor = System.Drawing.Color.WhiteSmoke;
             this.groupNetwork.Location = new System.Drawing.Point(0, 0);
+            this.groupNetwork.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.groupNetwork.Name = "groupNetwork";
-            this.groupNetwork.Size = new System.Drawing.Size(370, 116);
+            this.groupNetwork.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.groupNetwork.Size = new System.Drawing.Size(278, 94);
             this.groupNetwork.TabIndex = 6;
             this.groupNetwork.TabStop = false;
             this.groupNetwork.Text = "Network";
             // 
+            // cmbIP
+            // 
+            this.cmbIP.FormattingEnabled = true;
+            this.cmbIP.Location = new System.Drawing.Point(38, 21);
+            this.cmbIP.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.cmbIP.Name = "cmbIP";
+            this.cmbIP.Size = new System.Drawing.Size(224, 25);
+            this.cmbIP.TabIndex = 4;
+            // 
             // numPort
             // 
-            this.numPort.Location = new System.Drawing.Point(70, 75);
+            this.numPort.Location = new System.Drawing.Point(52, 61);
+            this.numPort.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.numPort.Maximum = new decimal(new int[] {
             65535,
             0,
             0,
             0});
             this.numPort.Name = "numPort";
-            this.numPort.Size = new System.Drawing.Size(80, 27);
+            this.numPort.Size = new System.Drawing.Size(61, 23);
             this.numPort.TabIndex = 3;
             this.numPort.Value = new decimal(new int[] {
             8181,
@@ -99,43 +115,38 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(13, 75);
+            this.label2.Location = new System.Drawing.Point(10, 61);
+            this.label2.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(50, 20);
+            this.label2.Size = new System.Drawing.Size(43, 17);
             this.label2.TabIndex = 2;
             this.label2.Text = "Port:";
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(13, 29);
+            this.label1.Location = new System.Drawing.Point(10, 24);
+            this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(32, 20);
+            this.label1.Size = new System.Drawing.Size(27, 17);
             this.label1.TabIndex = 0;
             this.label1.Tag = "This is for external devices connecting. Do NOT change this unless you have a spe" +
     "cfic reason!";
             this.label1.Text = "IP:";
             // 
-            // cmbIP
-            // 
-            this.cmbIP.FormattingEnabled = true;
-            this.cmbIP.Location = new System.Drawing.Point(51, 26);
-            this.cmbIP.Name = "cmbIP";
-            this.cmbIP.Size = new System.Drawing.Size(298, 28);
-            this.cmbIP.TabIndex = 4;
-            // 
             // FrmSettings
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.DimGray;
-            this.ClientSize = new System.Drawing.Size(370, 205);
+            this.ClientSize = new System.Drawing.Size(278, 135);
             this.ControlBox = false;
             this.Controls.Add(this.groupNetwork);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.btnSave);
             this.ForeColor = System.Drawing.Color.WhiteSmoke;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
+            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "FrmSettings";

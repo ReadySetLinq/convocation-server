@@ -40,14 +40,16 @@
             // 
             // btnClose
             // 
+            this.btnClose.BackColor = System.Drawing.SystemColors.Control;
             this.btnClose.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnClose.ForeColor = System.Drawing.Color.Black;
-            this.btnClose.Location = new System.Drawing.Point(334, 266);
+            this.btnClose.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.btnClose.Location = new System.Drawing.Point(250, 216);
+            this.btnClose.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.btnClose.Name = "btnClose";
-            this.btnClose.Size = new System.Drawing.Size(109, 35);
+            this.btnClose.Size = new System.Drawing.Size(82, 28);
             this.btnClose.TabIndex = 5;
             this.btnClose.Text = "Close";
-            this.btnClose.UseVisualStyleBackColor = true;
+            this.btnClose.UseVisualStyleBackColor = false;
             this.btnClose.Click += new System.EventHandler(this.BtnClose_Click);
             // 
             // groupBox1
@@ -57,50 +59,58 @@
             this.groupBox1.Controls.Add(this.lblStaticDirection);
             this.groupBox1.Controls.Add(this.lblStaticTimestamp);
             this.groupBox1.ForeColor = System.Drawing.Color.WhiteSmoke;
-            this.groupBox1.Location = new System.Drawing.Point(13, 235);
+            this.groupBox1.Location = new System.Drawing.Point(10, 191);
+            this.groupBox1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(303, 91);
+            this.groupBox1.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.groupBox1.Size = new System.Drawing.Size(227, 74);
             this.groupBox1.TabIndex = 6;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Information";
             // 
             // txtDirection
             // 
+            this.txtDirection.BackColor = System.Drawing.SystemColors.Window;
             this.txtDirection.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.txtDirection.Enabled = false;
-            this.txtDirection.Location = new System.Drawing.Point(194, 21);
+            this.txtDirection.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtDirection.Location = new System.Drawing.Point(146, 17);
+            this.txtDirection.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.txtDirection.Name = "txtDirection";
             this.txtDirection.ReadOnly = true;
-            this.txtDirection.Size = new System.Drawing.Size(88, 22);
+            this.txtDirection.Size = new System.Drawing.Size(66, 22);
             this.txtDirection.TabIndex = 6;
             this.txtDirection.Tag = "";
             // 
             // txtTimestamp
             // 
+            this.txtTimestamp.BackColor = System.Drawing.SystemColors.Window;
             this.txtTimestamp.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.txtTimestamp.Enabled = false;
-            this.txtTimestamp.Location = new System.Drawing.Point(6, 51);
+            this.txtTimestamp.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtTimestamp.Location = new System.Drawing.Point(4, 41);
+            this.txtTimestamp.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.txtTimestamp.Name = "txtTimestamp";
             this.txtTimestamp.ReadOnly = true;
-            this.txtTimestamp.Size = new System.Drawing.Size(276, 22);
+            this.txtTimestamp.Size = new System.Drawing.Size(208, 22);
             this.txtTimestamp.TabIndex = 5;
             this.txtTimestamp.Tag = "";
             // 
             // lblStaticDirection
             // 
             this.lblStaticDirection.AutoSize = true;
-            this.lblStaticDirection.Location = new System.Drawing.Point(120, 23);
+            this.lblStaticDirection.Location = new System.Drawing.Point(90, 19);
+            this.lblStaticDirection.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblStaticDirection.Name = "lblStaticDirection";
-            this.lblStaticDirection.Size = new System.Drawing.Size(68, 17);
+            this.lblStaticDirection.Size = new System.Drawing.Size(52, 13);
             this.lblStaticDirection.TabIndex = 4;
             this.lblStaticDirection.Text = "Direction:";
             // 
             // lblStaticTimestamp
             // 
             this.lblStaticTimestamp.AutoSize = true;
-            this.lblStaticTimestamp.Location = new System.Drawing.Point(6, 31);
+            this.lblStaticTimestamp.Location = new System.Drawing.Point(4, 25);
+            this.lblStaticTimestamp.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblStaticTimestamp.Name = "lblStaticTimestamp";
-            this.lblStaticTimestamp.Size = new System.Drawing.Size(81, 17);
+            this.lblStaticTimestamp.Size = new System.Drawing.Size(61, 13);
             this.lblStaticTimestamp.TabIndex = 3;
             this.lblStaticTimestamp.Tag = "";
             this.lblStaticTimestamp.Text = "Timestamp:";
@@ -108,28 +118,30 @@
             // txtMessage
             // 
             this.txtMessage.BackColor = System.Drawing.Color.Black;
-            this.txtMessage.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txtMessage.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.txtMessage.Dock = System.Windows.Forms.DockStyle.Top;
             this.txtMessage.ForeColor = System.Drawing.Color.WhiteSmoke;
             this.txtMessage.Location = new System.Drawing.Point(0, 0);
+            this.txtMessage.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.txtMessage.Name = "txtMessage";
             this.txtMessage.ReadOnly = true;
-            this.txtMessage.Size = new System.Drawing.Size(461, 229);
+            this.txtMessage.Size = new System.Drawing.Size(346, 187);
             this.txtMessage.TabIndex = 7;
             this.txtMessage.Text = "";
             // 
             // FrmMessageData
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.DimGray;
-            this.ClientSize = new System.Drawing.Size(461, 374);
+            this.ClientSize = new System.Drawing.Size(346, 274);
             this.ControlBox = false;
             this.Controls.Add(this.txtMessage);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.btnClose);
             this.ForeColor = System.Drawing.Color.WhiteSmoke;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
+            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "FrmMessageData";
