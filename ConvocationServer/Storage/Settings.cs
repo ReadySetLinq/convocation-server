@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
+using Microsoft.Win32;
+using System.Windows.Forms;
 
 namespace ConvocationServer.Storage
 {
@@ -14,6 +16,7 @@ namespace ConvocationServer.Storage
 
         public string IPAddress { get; set; }
         public int Port { get; set; }
+        public bool RunOnStartup { get; set; }
         public List<Account> Accounts { get; set; }
 
 
@@ -22,6 +25,8 @@ namespace ConvocationServer.Storage
             // Set Defaults
             IPAddress = _defaultIpAddress;
             Port = 8181;
+            RunOnStartup = true;
+            Accounts = new List<Account>();
         }
 
         public string SetIPAddress(string address)
@@ -44,6 +49,7 @@ namespace ConvocationServer.Storage
 
         public string IPAddress { get => appSettings.IPAddress; set => appSettings.SetIPAddress(appSettings.IPAddress = value); }
         public int Port { get => appSettings.Port; set => appSettings.Port = value; }
+        public bool RunOnStartup { get => appSettings.RunOnStartup; set => appSettings.RunOnStartup = value; }
         public List<Account> Accounts { get => appSettings.Accounts; set => appSettings.Accounts = value; }
 
         public Settings()
@@ -64,6 +70,7 @@ namespace ConvocationServer.Storage
             catch
             {
                 appSettings = new AppSettings();
+                SetStartup(appSettings.RunOnStartup);
             }
 
             // If no accounts exist, add the default
@@ -76,6 +83,7 @@ namespace ConvocationServer.Storage
             // Seralize appSettings class into JSON string
             // Then Base64 encode that string an save it to our file
             File.WriteAllText(fileName, JsonConvert.SerializeObject(appSettings).Base64Encode());
+            SetStartup(appSettings.RunOnStartup);
         }
 
         public bool AddAccount(string userName, string password)
@@ -134,6 +142,21 @@ namespace ConvocationServer.Storage
             string _userName = userName.ToLower().Trim();
             return Accounts.FirstOrDefault(a => a.LowerName.Equals(_userName));
         }
+
+        private void SetStartup(bool addKey)
+        {
+            try
+            {
+                RegistryKey registry = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
+
+                string AppName = System.Reflection.Assembly.GetExecutingAssembly().GetName().Name;
+                if (addKey)
+                    registry.SetValue(AppName, Application.ExecutablePath);
+                else
+                    registry.DeleteValue(AppName, false);
+            } catch { }
+        }
+
 
     }
 }

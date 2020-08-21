@@ -24,12 +24,12 @@ namespace ConvocationServer.Forms
                 cmbIP.Items.Add(ipv4Addresses[i].ToString());
             }
 
-            Settings storageSettings = _parent.StorageSettings;
-            numPort.Value = storageSettings.Port;
+            numPort.Value = _parent.StorageSettings.Port;
+            chkStartup.Checked = _parent.StorageSettings.RunOnStartup;
 
             if (cmbIP.Items.Count > 0)
             {
-                int index = cmbIP.Items.IndexOf(storageSettings.IPAddress);
+                int index = cmbIP.Items.IndexOf(_parent.StorageSettings.IPAddress);
                 if (index > -1)
                     cmbIP.SelectedIndex = index;
                 else
@@ -39,16 +39,16 @@ namespace ConvocationServer.Forms
 
         private void BtnSave_Click(object sender, EventArgs e)
         {
-            Settings storageSettings = _parent.StorageSettings;
-            storageSettings.IPAddress = cmbIP.Text.Trim();
-            storageSettings.Port = (int)numPort.Value;
-            storageSettings.Save();
-            Hide();
+            _parent.StorageSettings.IPAddress = cmbIP.Text.Trim();
+            _parent.StorageSettings.Port = (int)numPort.Value;
+            _parent.StorageSettings.RunOnStartup = chkStartup.Checked;
+            _parent.StorageSettings.Save();
+            Dispose();
         }
 
         private void BtnClose_Click(object sender, EventArgs e)
         {
-            Hide();
+            Dispose();
         }
     }
 }
