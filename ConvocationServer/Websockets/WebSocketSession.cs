@@ -376,7 +376,10 @@ namespace ConvocationServer.Websockets
                 {
                     string _msg = JsonConvert.SerializeObject(message);
                     SendMessage(_msg);
-                    _parent.AddMessage(message, $"{message["service"]?.ToString().FirstCharToUpper()} response", "Outgoing");
+                    string title = message["service"]?.ToString();
+                    if (message.ContainsKey("data") && message["data"]["action"] != null)
+                        title = message["data"]["action"].ToString();
+                    _parent.AddMessage(message, $"{title.FirstCharToUpper()} response", "Outgoing");
                 }
             }
             catch (Exception e) { Console.Error.WriteLine(e); };
