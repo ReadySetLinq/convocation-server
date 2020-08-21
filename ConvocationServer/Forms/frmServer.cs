@@ -24,10 +24,12 @@ namespace ConvocationServer
 
             Text += " v" + Application.ProductVersion;
             lblStatus.Text = "Stopped";
+
             TblMessages.Columns.Add("Message", typeof(string));
             TblMessages.Columns.Add("Title", typeof(string));
             TblMessages.Columns.Add("Direction", typeof(string));
             TblMessages.Columns.Add("Timestamp", typeof(string));
+
             dgvMessages.DataSource = TblMessages;
             dgvMessages.Columns[0].Visible = false;
             dgvMessages.Columns[1].FillWeight = 134.1965F;
@@ -45,6 +47,8 @@ namespace ConvocationServer
                new FrmMessageData(),
                // Users Manager = Index 2
                new FrmUsers(this),
+               // Information = Index 3
+               new FrmInfo(this),
             };
             Server = new WebSocketServer(this);
 
@@ -70,6 +74,12 @@ namespace ConvocationServer
 
         private void FrmServer_Shown(object sender, EventArgs e)
         {
+            if (WindowState == FormWindowState.Minimized)
+            {
+                Hide();
+                return;
+            };
+
             showToolStripMenuItem.Text = "Hide";
             ctxMenuStripNotify.Hide();
         }
@@ -205,7 +215,16 @@ namespace ConvocationServer
         // Help ToolStrip Buttons
         private void InfoToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            if (LstForms[3].IsDisposed)
+            {
+                LstForms[3] = new FrmInfo(this);
+            }
+            FrmInfo frm = (FrmInfo)LstForms[3];
 
+            if (frm == null) return;
+
+            frm.Show();
+            frm.BringToFront();
         }
         
         private void FrmServer_Click(object sender, EventArgs e)
@@ -418,6 +437,19 @@ namespace ConvocationServer
                 if (selectedIndex != -1)
                     dgvMessages.Rows[selectedIndex].Selected = true;
             });
+        }
+
+        public string SelectXpnProjectPath()
+        {
+            DialogResult result = openXpnFileDialog.ShowDialog(); // Show the dialog.
+            if (result == DialogResult.OK) // Test result.
+            {
+                string file = openXpnFileDialog.FileName;
+                if (file.EndsWith(".xpf"))
+                    return file;
+            }
+
+            return null;
         }
     }
 }

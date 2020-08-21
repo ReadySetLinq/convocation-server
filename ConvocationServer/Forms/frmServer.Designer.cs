@@ -30,8 +30,8 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmServer));
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle17 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle18 = new System.Windows.Forms.DataGridViewCellStyle();
             this.notifyIcon = new System.Windows.Forms.NotifyIcon(this.components);
             this.ctxMenuStripNotify = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.connectToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -57,6 +57,7 @@
             this.ctxMenuStripMessageData = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.toolStripMenuItemDetailedView = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.openXpnFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.ctxMenuStripNotify.SuspendLayout();
             this.menuStripServer.SuspendLayout();
             this.panelBottom.SuspendLayout();
@@ -281,14 +282,14 @@
             this.dgvMessages.BackgroundColor = System.Drawing.Color.DimGray;
             this.dgvMessages.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.dgvMessages.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle3.ForeColor = System.Drawing.Color.WhiteSmoke;
-            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dgvMessages.DefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle17.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle17.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle17.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle17.ForeColor = System.Drawing.Color.WhiteSmoke;
+            dataGridViewCellStyle17.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle17.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle17.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dgvMessages.DefaultCellStyle = dataGridViewCellStyle17;
             this.dgvMessages.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dgvMessages.Location = new System.Drawing.Point(0, 24);
             this.dgvMessages.Margin = new System.Windows.Forms.Padding(2);
@@ -296,11 +297,11 @@
             this.dgvMessages.Name = "dgvMessages";
             this.dgvMessages.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.dgvMessages.RowHeadersWidth = 51;
-            dataGridViewCellStyle4.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle4.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle4.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            this.dgvMessages.RowsDefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle18.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle18.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle18.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle18.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            this.dgvMessages.RowsDefaultCellStyle = dataGridViewCellStyle18;
             this.dgvMessages.RowTemplate.ContextMenuStrip = this.ctxMenuStripMessageData;
             this.dgvMessages.RowTemplate.Height = 24;
             this.dgvMessages.Size = new System.Drawing.Size(474, 312);
@@ -327,6 +328,12 @@
             // 
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
             this.toolStripMenuItem1.Size = new System.Drawing.Size(32, 19);
+            // 
+            // openXpnFileDialog
+            // 
+            this.openXpnFileDialog.DefaultExt = "xpf";
+            this.openXpnFileDialog.Filter = "Xpression Project Files|*.xpf";
+            this.openXpnFileDialog.Title = "Select a Xpression Project File (*.xpf)";
             // 
             // FrmServer
             // 
@@ -389,6 +396,7 @@
         private System.Windows.Forms.Label lblStaticView;
         private System.Windows.Forms.ContextMenuStrip ctxMenuStripMessageData;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemDetailedView;
+        private System.Windows.Forms.OpenFileDialog openXpnFileDialog;
     }
 }
 
