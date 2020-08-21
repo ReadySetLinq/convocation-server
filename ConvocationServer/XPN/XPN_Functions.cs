@@ -40,6 +40,8 @@ namespace ConvocationServer.XPN
 
         public bool Stop()
         {
+            if (_engine != null)
+                _engine.CloseProject();
             Dispose();
             return true;
         }
@@ -77,7 +79,10 @@ namespace ConvocationServer.XPN
         {
             try
             {
-                return _engine.LoadProject(FileName: name);
+                bool loaded = _engine.LoadProject(FileName: name);
+                if (loaded)
+                    _engine.RestoreGUI(); // Fix GUI issue with the engine staying blank
+                return loaded;
             }
             catch { return false; }
         }
