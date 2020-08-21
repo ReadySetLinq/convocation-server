@@ -50,7 +50,7 @@ namespace ConvocationServer.Forms
             Account _newAccount = new Account($"user{storageSettings.Accounts.Count + 1}", "password");
 
             // Try to add the new account, if this fails return out
-            if (!storageSettings.AddAccount(_newAccount.UserName, _newAccount.Password)) return;
+            if (!_parent.StorageSettings.AddAccount(_newAccount.UserName, _newAccount.Password)) return;
 
             int newIndex = lstUsers.Items.Add(_newAccount.UserName);
 
@@ -60,7 +60,7 @@ namespace ConvocationServer.Forms
 
         private void BtnCancel_Click(object sender, EventArgs e)
         {
-            Hide();
+            Dispose();
         }
 
         private void BtnSave_Click(object sender, EventArgs e)
@@ -86,9 +86,8 @@ namespace ConvocationServer.Forms
                 return;
             };
 
-            Settings storageSettings = _parent.StorageSettings;
-            selectedAccount = storageSettings.EditAccount(selectedAccount.UserName, txtUserName.Text, txtPassword.Text);
-            storageSettings.Save();
+            selectedAccount = _parent.StorageSettings.EditAccount(selectedAccount.UserName, txtUserName.Text, txtPassword.Text);
+            _parent.StorageSettings.Save();
 
             int index = lstUsers.SelectedIndex;
             if (index == -1) return;
@@ -115,9 +114,8 @@ namespace ConvocationServer.Forms
             // If the user selected no, return
             if (result == DialogResult.No) return;
 
-            Settings storageSettings = _parent.StorageSettings;
-            storageSettings.RemoveAccount(selectedAccount.UserName);
-            storageSettings.Save();
+            _parent.StorageSettings.RemoveAccount(selectedAccount.UserName);
+            _parent.StorageSettings.Save();
 
             // Get current selected index
             int index = lstUsers.SelectedIndex;
