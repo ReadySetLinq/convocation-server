@@ -57,6 +57,28 @@ namespace ConvocationServer.Websockets
                 return;
             }
 
+            string projectName = XpnFunctions.ProjectFileName();
+            if (projectName == null)
+            {
+                bool projectLoaded = false;
+                projectName = parent.SelectXpnProjectPath();
+                if (projectName != null)
+                {
+                    projectLoaded = XpnFunctions.LoadProject(projectName);
+                }
+
+                if (!projectLoaded)
+                {
+                    XpnFunctions.Dispose();
+                    parent.UpdateStatus("Xpression Error");
+                    DialogResult response = MessageBox.Show("Make sure a Xpression Project is open before starting the server!", "Failed to connect with Xpression",
+                                    MessageBoxButtons.OK,
+                                    MessageBoxIcon.Error);
+                    parent.UpdateStatus("Stopped");
+                    return;
+                }
+            }
+
             server = new TcpListener(IPAddress.Parse(address), Convert.ToInt32(port));
             server.Start();
 
@@ -115,7 +137,10 @@ namespace ConvocationServer.Websockets
                 if (message != null && message["service"] != null)
                 {
                     session.SendMessage(message);
-                    parent.AddMessage(message, $"{message["service"]} Message", "Outgoing");
+                    string title = message["service"]?.ToString();
+                    if (message.ContainsKey("data") && message["data"]["action"] != null)
+                        title = message["data"]["action"].ToString();
+                    parent.AddMessage(message, $"{title.FirstCharToUpper()} Message", "Outgoing");
                 }
             }
             catch (Exception e)
@@ -145,7 +170,12 @@ namespace ConvocationServer.Websockets
                     }
                 }
                 if (addLog)
-                    parent.AddMessage(message, $"{message["service"]} Message", "Outgoing");
+                {
+                    string title = message["service"]?.ToString();
+                    if (message.ContainsKey("data") && message["data"]["action"] != null)
+                        title = message["data"]["action"].ToString();
+                    parent.AddMessage(message, $"{title.FirstCharToUpper()} Message", "Outgoing");
+                }
             }
             catch (Exception e)
             {
