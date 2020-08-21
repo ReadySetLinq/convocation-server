@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("ReadySetLinq")]
 [assembly: AssemblyProduct("ConvocationServer")]
-[assembly: AssemblyCopyright("Copyright © ReadySetLinq 2020")]
+[assembly: AssemblyCopyright("© 2020 ReadySetLinq")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
