@@ -368,7 +368,7 @@ namespace ConvocationServer.Websockets
             catch { return false; }
         }
 
-        public void SendMessage(JObject message)
+        public void SendMessage(JObject message, bool addLog = true)
         {
             try
             {
@@ -376,10 +376,13 @@ namespace ConvocationServer.Websockets
                 {
                     string _msg = JsonConvert.SerializeObject(message);
                     SendMessage(_msg);
-                    string title = message["service"]?.ToString();
-                    if (message.ContainsKey("data") && message["data"]["action"] != null)
-                        title = message["data"]["action"].ToString();
-                    _parent.AddMessage(message, $"{title.FirstCharToUpper()} response", "Outgoing");
+                    if (addLog)
+                    {
+                        string title = message["service"]?.ToString();
+                        if (message.ContainsKey("data") && message["data"]["action"] != null)
+                            title = message["data"]["action"].ToString();
+                        _parent.AddMessage(message, $"{title.FirstCharToUpper()} response", "Outgoing");
+                    }
                 }
             }
             catch (Exception e) { Console.Error.WriteLine(e); };
@@ -392,7 +395,7 @@ namespace ConvocationServer.Websockets
 
         static void SendMessage(TcpClient client, string payload) =>
                     SendMessage(client, Encoding.UTF8.GetBytes(payload), false);
-        static void SendMessage(TcpClient client, byte[] payload, bool isBinary = false, bool masking = false)
+        static void SendMessage(TcpClient client, byte[] payload, bool isBinary = false)
         {
             SendMessage(client, payload, isBinary ? 0x2 : 0x1);
         }

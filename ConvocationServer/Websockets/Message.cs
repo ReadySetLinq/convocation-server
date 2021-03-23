@@ -90,4 +90,22 @@ namespace ConvocationServer.Websockets
 
     }
 
+    public class SpectatorService
+    {
+        public string Action { get; set; }
+
+        public string UUID { get; set; }
+        public string Program { get; set; }
+
+        [Optional]
+        public JObject Last { get; set; }
+
+        [Optional]
+        public JObject Current { get; set; }
+
+        [Optional]
+        public JObject Next { get; set; }
+
+    }
+
 }

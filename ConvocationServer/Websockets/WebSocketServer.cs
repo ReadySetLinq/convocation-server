@@ -260,9 +260,44 @@ namespace ConvocationServer.Websockets
                                                                     { "service", "status" },
                                                                     { "data", new JObject {
                                                                         { "type", "error" },
-                                                                        { "message", $"You must be logged in and access the service: {sMessage.Service}" }
+                                                                        { "message", $"You must be logged in to access the service: {sMessage.Service}" }
                                                                     } }
                                                                 });
+                            }
+                            break;
+
+                        // Spectator
+                        case "spectator":
+                            sData = sMessage.Data.ToObject<SpectatorService>();
+                            // If it's an update action, send spectator message to all
+                            if (sData.Action == "update")
+                            {
+                                // Example: {"service": "spectator", "data": {"action": "update", "uuid": "spectatorUpdate-123", "program": "BRTF", "last": {"id": 1, "name": "First Last", extra: "", "multiplier": 0, "displyName": "First Last" }, "current": {"id": 2, "name": "First Last", extra: "", "multiplier": 0, "displyName": "First Last" }, "next": {"id": 3, "name": "First Last", extra: "", "multiplier": 0, "displyName": "First Last" }} }
+                                if (session.LoggedIn)
+                                {
+                                    SendToAll(message: new JObject {
+                                                        { "service", "spectator" },
+                                                        { "data", new JObject {
+                                                            { "program", sData.Program },
+                                                            { "last", sData.Last },
+                                                            { "current", sData.Current },
+                                                            { "next", sData.Next },
+                                                        } }
+                                                    },
+                                                    verifyLogin: false,
+                                                    addLog: false);
+                                }
+                                else
+                                {
+                                    parent.AddMessage(_msgObj, "Error: Invalid login status", "Incoming");
+                                    session.SendMessage(message: new JObject {
+                                                                    { "service", "status" },
+                                                                    { "data", new JObject {
+                                                                        { "type", "error" },
+                                                                        { "message", $"You must be logged in to access the service: {sMessage.Service}, with the action: {sData.Action}" }
+                                                                    } }
+                                                                });
+                                }
                             }
                             break;
 
