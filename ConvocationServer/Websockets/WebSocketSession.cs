@@ -251,6 +251,7 @@ namespace ConvocationServer.Websockets
         public void LogIn(string userName, string password)
         {
             LoggedIn = true;
+            IsSpectator = false;
             SetUserData(userName, password);
 
             // Send out the login message

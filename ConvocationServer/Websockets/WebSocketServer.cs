@@ -313,6 +313,8 @@ namespace ConvocationServer.Websockets
                             {
                                 // If its a join message, send the last logged spectator message
                                 // Example: {"service": "spectator", "data": {"action": "join", "uuid": "spectatorUpdate-123"} }
+                                parent.AddMessage(_msgObj, "Spectator joined", "Incoming");
+                                session.IsSpectator = true;
                                 session.SendMessage(message: new JObject {
                                                         { "service", "spectator" },
                                                         { "data", new JObject {
