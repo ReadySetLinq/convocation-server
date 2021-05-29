@@ -26,7 +26,6 @@ C:\git\convocation-server\ConvocationServer\bin\Release\System.Text.Encodings.We
 C:\git\convocation-server\ConvocationServer\bin\Release\System.Text.Json.xml
 C:\git\convocation-server\ConvocationServer\bin\Release\System.Threading.Tasks.Extensions.xml
 C:\git\convocation-server\ConvocationServer\bin\Release\System.ValueTuple.xml
-C:\git\convocation-server\ConvocationServer\obj\Release\ConvocationServer.csprojAssemblyReference.cache
 C:\git\convocation-server\ConvocationServer\obj\Release\ConvocationServer.Forms.FrmMessageData.resources
 C:\git\convocation-server\ConvocationServer\obj\Release\ConvocationServer.FrmServer.resources
 C:\git\convocation-server\ConvocationServer\obj\Release\ConvocationServer.Forms.FrmSettings.resources
@@ -37,3 +36,4 @@ C:\git\convocation-server\ConvocationServer\obj\Release\ConvocationServer.csproj
 C:\git\convocation-server\ConvocationServer\obj\Release\ConvocationServer.csproj.CopyComplete
 C:\git\convocation-server\ConvocationServer\obj\Release\ConvocationServer.exe
 C:\git\convocation-server\ConvocationServer\obj\Release\ConvocationServer.pdb
+C:\git\convocation-server\ConvocationServer\obj\Release\ConvocationServer.Forms.FrmInfo.resources

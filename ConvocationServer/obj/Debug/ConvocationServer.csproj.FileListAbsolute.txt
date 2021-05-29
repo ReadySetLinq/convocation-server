@@ -26,7 +26,6 @@ C:\git\convocation-server\ConvocationServer\bin\Debug\xptoolslib.net.dll
 C:\git\convocation-server\ConvocationServer\bin\Debug\Newtonsoft.Json.xml
 C:\git\convocation-server\ConvocationServer\bin\Debug\nunit.framework.pdb
 C:\git\convocation-server\ConvocationServer\bin\Debug\nunit.framework.xml
-C:\git\convocation-server\ConvocationServer\obj\Debug\ConvocationServer.csprojAssemblyReference.cache
 C:\git\convocation-server\ConvocationServer\obj\Debug\ConvocationServer.Forms.FrmMessageData.resources
 C:\git\convocation-server\ConvocationServer\obj\Debug\ConvocationServer.FrmServer.resources
 C:\git\convocation-server\ConvocationServer\obj\Debug\ConvocationServer.Forms.FrmSettings.resources
