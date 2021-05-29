@@ -94,3 +94,4 @@ G:\git\convocation-server\ConvocationServer\obj\Debug\ConvocationServer.csproj.G
 G:\git\convocation-server\ConvocationServer\obj\Debug\ConvocationServer.csproj.CopyComplete
 G:\git\convocation-server\ConvocationServer\obj\Debug\ConvocationServer.exe
 G:\git\convocation-server\ConvocationServer\obj\Debug\ConvocationServer.pdb
+C:\git\convocation-server\ConvocationServer\obj\Debug\ConvocationServer.Forms.FrmInfo.resources
