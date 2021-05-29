@@ -25,6 +25,7 @@ namespace ConvocationServer.Websockets
         public string UserName { get; set; }
         public string Password { get; set; }
         public bool LoggedIn { get; set; }
+        public bool IsSpectator { get; set; }
 
         public event EventHandler<WebSocketSession> HandshakeCompleted;
         public event EventHandler<WebSocketSession> Disconnected;
@@ -42,6 +43,7 @@ namespace ConvocationServer.Websockets
             UserName = string.Empty;
             Password = string.Empty;
             LoggedIn = false;
+            IsSpectator = false;
         }
 
         public void SetUserData(string userName, string password)

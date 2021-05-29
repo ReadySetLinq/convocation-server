@@ -98,13 +98,13 @@ namespace ConvocationServer.Websockets
         public string Program { get; set; }
 
         [Optional]
-        public JObject Last { get; set; }
+        public string Last { get; set; }
 
         [Optional]
-        public JObject Current { get; set; }
+        public string Current { get; set; }
 
         [Optional]
-        public JObject Next { get; set; }
+        public string Next { get; set; }
 
     }
 

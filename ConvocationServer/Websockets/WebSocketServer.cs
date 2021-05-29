@@ -18,6 +18,7 @@ namespace ConvocationServer.Websockets
         private readonly FrmServer parent;
         private TcpListener server;
         private readonly XPN_Functions XpnFunctions = new XPN_Functions();
+        private SpectatorService lastSepctator = new SpectatorService();
 
         public readonly List<WebSocketSession> Clients = new List<WebSocketSession>();
         public event EventHandler<WebSocketSession> ClientConnected;
@@ -28,6 +29,12 @@ namespace ConvocationServer.Websockets
         public WebSocketServer(FrmServer serverForm)
         {
             parent = serverForm;
+            lastSepctator.Action = "update";
+            lastSepctator.UUID = "null";
+            lastSepctator.Program = "[none]";
+            lastSepctator.Last = "[none]";
+            lastSepctator.Current = "[none]";
+            lastSepctator.Next = "[none]";
         }
         
         public void Start()
@@ -150,7 +157,7 @@ namespace ConvocationServer.Websockets
         }
 
         // Send a message to everyone in a given service
-        private void SendToAll(JObject message, bool verifyLogin = true, bool addLog = true)
+        private void SendToAll(JObject message, bool verifyLogin = true, bool verifySpectator = false, bool addLog = true)
         {
             try
             {
@@ -163,7 +170,7 @@ namespace ConvocationServer.Websockets
                     foreach (WebSocketSession session in Clients)
                     {
                         // Only send out messages to verified connections
-                        if (!verifyLogin || session.LoggedIn)
+                        if ((!verifyLogin || session.LoggedIn) && (!verifySpectator || session.IsSpectator))
                         {
                             session.SendMessage(_msg);
                         }
@@ -228,12 +235,12 @@ namespace ConvocationServer.Websockets
                 if (_msgObj == null)
                 {
                     session.SendMessage(message: new JObject {
-                                                        { "service", "status" },
-                                                        { "data", new JObject {
-                                                            { "type", "error" },
-                                                            { "message", $"Invalid message" }
-                                                        } }
-                                                    });
+                                            { "service", "status" },
+                                            { "data", new JObject {
+                                                { "type", "error" },
+                                                { "message", $"Invalid message" }
+                                            } }
+                                        });
                     parent.AddMessage(message, "Error: Invalid client message", "Incoming");
                     return;
                 }
@@ -257,12 +264,12 @@ namespace ConvocationServer.Websockets
                             {
                                 parent.AddMessage(_msgObj, "Error: Invalid login status", "Incoming");
                                 session.SendMessage(message: new JObject {
-                                                                    { "service", "status" },
-                                                                    { "data", new JObject {
-                                                                        { "type", "error" },
-                                                                        { "message", $"You must be logged in to access the service: {sMessage.Service}" }
-                                                                    } }
-                                                                });
+                                                        { "service", "status" },
+                                                        { "data", new JObject {
+                                                            { "type", "error" },
+                                                            { "message", $"You must be logged in to access the service: {sMessage.Service}" }
+                                                        } }
+                                                    });
                             }
                             break;
 
@@ -275,29 +282,47 @@ namespace ConvocationServer.Websockets
                                 // Example: {"service": "spectator", "data": {"action": "update", "uuid": "spectatorUpdate-123", "program": "BRTF", "last": {"id": 1, "name": "First Last", extra: "", "multiplier": 0, "displyName": "First Last" }, "current": {"id": 2, "name": "First Last", extra: "", "multiplier": 0, "displyName": "First Last" }, "next": {"id": 3, "name": "First Last", extra: "", "multiplier": 0, "displyName": "First Last" }} }
                                 if (session.LoggedIn)
                                 {
+                                    // Update local lastSepctator variable
+                                    lastSepctator = sData;
+                                    // Send out message to everyone who is a spectator
                                     SendToAll(message: new JObject {
-                                                        { "service", "spectator" },
-                                                        { "data", new JObject {
-                                                            { "program", sData.Program },
-                                                            { "last", sData.Last },
-                                                            { "current", sData.Current },
-                                                            { "next", sData.Next },
-                                                        } }
-                                                    },
-                                                    verifyLogin: false,
-                                                    addLog: false);
+                                                { "service", "spectator" },
+                                                { "data", new JObject {
+                                                    { "program", sData?.Program },
+                                                    { "last", sData?.Last },
+                                                    { "current", sData?.Current },
+                                                    { "next", sData?.Next },
+                                                } }
+                                            },
+                                            verifyLogin: false,
+                                            verifySpectator: true,
+                                            addLog: true);
                                 }
                                 else
                                 {
                                     parent.AddMessage(_msgObj, "Error: Invalid login status", "Incoming");
                                     session.SendMessage(message: new JObject {
-                                                                    { "service", "status" },
-                                                                    { "data", new JObject {
-                                                                        { "type", "error" },
-                                                                        { "message", $"You must be logged in to access the service: {sMessage.Service}, with the action: {sData.Action}" }
-                                                                    } }
-                                                                });
+                                                            { "service", "status" },
+                                                            { "data", new JObject {
+                                                                { "type", "error" },
+                                                                { "message", $"You must be logged in to access the service: {sMessage.Service}, with the action: {sData.Action}" }
+                                                            } }
+                                                        });
                                 }
+                            } else if (sData.Action == "join")
+                            {
+                                // If its a join message, send the last logged spectator message
+                                // Example: {"service": "spectator", "data": {"action": "join", "uuid": "spectatorUpdate-123"} }
+                                session.SendMessage(message: new JObject {
+                                                        { "service", "spectator" },
+                                                        { "data", new JObject {
+                                                            { "program", lastSepctator?.Program },
+                                                            { "last", lastSepctator?.Last },
+                                                            { "current", lastSepctator?.Current },
+                                                            { "next", lastSepctator?.Next },
+                                                        } }
+                                                    });
+
                             }
                             break;
 
@@ -307,24 +332,23 @@ namespace ConvocationServer.Websockets
                             sData = sMessage.Data.ToObject<StatusService>();
                             if (sData.Type != null && sData.Type == "ping")
                             {
-                                session.SendMessage(message: new JObject
-                                                {
-                                                    { "service", "status" },
-                                                    { "data", new JObject {
-                                                        { "type", "ping" },
-                                                        { "message", "pong" }
-                                                    }}
-                                                });
+                                session.SendMessage(message: new JObject {
+                                                        { "service", "status" },
+                                                        { "data", new JObject {
+                                                            { "type", "ping" },
+                                                            { "message", "pong" }
+                                                        }}
+                                                    });
                             }
                             else
                             {
                                 session.SendMessage(message: new JObject {
-                                                                    { "service", "status" },
-                                                                    { "data", new JObject {
-                                                                        { "type", "error" },
-                                                                        { "message", "Invalid status type!" }
-                                                                    } }
-                                                                });
+                                                            { "service", "status" },
+                                                            { "data", new JObject {
+                                                                { "type", "error" },
+                                                                { "message", "Invalid status type!" }
+                                                            } }
+                                                        });
                             }
                             break;
 
@@ -340,12 +364,12 @@ namespace ConvocationServer.Websockets
                             else
                             {
                                 session.SendMessage(message: new JObject {
-                                                                    { "service", "status" },
-                                                                    { "data", new JObject {
-                                                                        { "type", "error" },
-                                                                        { "message", "Incorrect username or password!" }
-                                                                    } }
-                                                                });
+                                                            { "service", "status" },
+                                                            { "data", new JObject {
+                                                                { "type", "error" },
+                                                                { "message", "Incorrect username or password!" }
+                                                            } }
+                                                        });
                             }
 
                             break;
@@ -363,13 +387,13 @@ namespace ConvocationServer.Websockets
                             else
                             {
                                 session.SendMessage(message: new JObject {
-                                                                    { "service", "status" },
-                                                                    { "data", new JObject {
-                                                                        { "type", "error" },
-                                                                        { "message", "No login detected!" }
-                                                                    } }
-                                                                });
-                            }
+                                                            { "service", "status" },
+                                                            { "data", new JObject {
+                                                                { "type", "error" },
+                                                                { "message", "No login detected!" }
+                                                            } }
+                                                        });
+                    }
                             break;
                         default:
                             parent.AddMessage(_msgObj, "Warning: Unknown client message", "Incoming");
