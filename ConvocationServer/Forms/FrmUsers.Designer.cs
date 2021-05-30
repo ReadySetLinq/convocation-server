@@ -30,6 +30,7 @@
         {
             this.components = new System.ComponentModel.Container();
             this.groupSelectedUser = new System.Windows.Forms.GroupBox();
+            this.btnRemove = new System.Windows.Forms.Button();
             this.btnReset = new System.Windows.Forms.Button();
             this.btnSave = new System.Windows.Forms.Button();
             this.txtPassword = new System.Windows.Forms.TextBox();
@@ -49,6 +50,7 @@
             // 
             // groupSelectedUser
             // 
+            this.groupSelectedUser.Controls.Add(this.btnRemove);
             this.groupSelectedUser.Controls.Add(this.btnReset);
             this.groupSelectedUser.Controls.Add(this.btnSave);
             this.groupSelectedUser.Controls.Add(this.txtPassword);
@@ -57,24 +59,38 @@
             this.groupSelectedUser.Controls.Add(this.lblUserName);
             this.groupSelectedUser.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupSelectedUser.ForeColor = System.Drawing.Color.WhiteSmoke;
-            this.groupSelectedUser.Location = new System.Drawing.Point(124, 0);
-            this.groupSelectedUser.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.groupSelectedUser.Location = new System.Drawing.Point(165, 0);
+            this.groupSelectedUser.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.groupSelectedUser.Name = "groupSelectedUser";
-            this.groupSelectedUser.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
-            this.groupSelectedUser.Size = new System.Drawing.Size(260, 191);
+            this.groupSelectedUser.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.groupSelectedUser.Size = new System.Drawing.Size(347, 235);
             this.groupSelectedUser.TabIndex = 7;
             this.groupSelectedUser.TabStop = false;
             this.groupSelectedUser.Text = "Selected User";
+            // 
+            // btnRemove
+            // 
+            this.btnRemove.BackColor = System.Drawing.SystemColors.Control;
+            this.btnRemove.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnRemove.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.btnRemove.Location = new System.Drawing.Point(230, 153);
+            this.btnRemove.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.btnRemove.Name = "btnRemove";
+            this.btnRemove.Size = new System.Drawing.Size(109, 34);
+            this.btnRemove.TabIndex = 7;
+            this.btnRemove.Text = "Remove";
+            this.btnRemove.UseVisualStyleBackColor = false;
+            this.btnRemove.Click += new System.EventHandler(this.btnRemove_Click);
             // 
             // btnReset
             // 
             this.btnReset.BackColor = System.Drawing.SystemColors.Control;
             this.btnReset.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnReset.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.btnReset.Location = new System.Drawing.Point(163, 124);
-            this.btnReset.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.btnReset.Location = new System.Drawing.Point(138, 153);
+            this.btnReset.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btnReset.Name = "btnReset";
-            this.btnReset.Size = new System.Drawing.Size(82, 28);
+            this.btnReset.Size = new System.Drawing.Size(74, 34);
             this.btnReset.TabIndex = 6;
             this.btnReset.Text = "Reset";
             this.btnReset.UseVisualStyleBackColor = false;
@@ -85,10 +101,10 @@
             this.btnSave.BackColor = System.Drawing.SystemColors.Control;
             this.btnSave.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnSave.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.btnSave.Location = new System.Drawing.Point(16, 124);
-            this.btnSave.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.btnSave.Location = new System.Drawing.Point(5, 153);
+            this.btnSave.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btnSave.Name = "btnSave";
-            this.btnSave.Size = new System.Drawing.Size(82, 28);
+            this.btnSave.Size = new System.Drawing.Size(109, 34);
             this.btnSave.TabIndex = 5;
             this.btnSave.Text = "Save";
             this.btnSave.UseVisualStyleBackColor = false;
@@ -97,41 +113,39 @@
             // txtPassword
             // 
             this.txtPassword.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.txtPassword.Location = new System.Drawing.Point(91, 81);
-            this.txtPassword.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.txtPassword.Location = new System.Drawing.Point(121, 100);
+            this.txtPassword.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.txtPassword.Name = "txtPassword";
             this.txtPassword.PasswordChar = '*';
-            this.txtPassword.Size = new System.Drawing.Size(154, 23);
+            this.txtPassword.Size = new System.Drawing.Size(205, 27);
             this.txtPassword.TabIndex = 3;
             this.txtPassword.Tag = "";
             // 
             // lblPassword
             // 
             this.lblPassword.AutoSize = true;
-            this.lblPassword.Location = new System.Drawing.Point(6, 83);
-            this.lblPassword.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lblPassword.Location = new System.Drawing.Point(8, 102);
             this.lblPassword.Name = "lblPassword";
-            this.lblPassword.Size = new System.Drawing.Size(82, 17);
+            this.lblPassword.Size = new System.Drawing.Size(97, 20);
             this.lblPassword.TabIndex = 2;
             this.lblPassword.Text = "Password:";
             // 
             // txtUserName
             // 
             this.txtUserName.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.txtUserName.Location = new System.Drawing.Point(92, 32);
-            this.txtUserName.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.txtUserName.Location = new System.Drawing.Point(123, 39);
+            this.txtUserName.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.txtUserName.Name = "txtUserName";
-            this.txtUserName.Size = new System.Drawing.Size(154, 23);
+            this.txtUserName.Size = new System.Drawing.Size(205, 27);
             this.txtUserName.TabIndex = 1;
             this.txtUserName.Tag = "";
             // 
             // lblUserName
             // 
             this.lblUserName.AutoSize = true;
-            this.lblUserName.Location = new System.Drawing.Point(6, 33);
-            this.lblUserName.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lblUserName.Location = new System.Drawing.Point(8, 41);
             this.lblUserName.Name = "lblUserName";
-            this.lblUserName.Size = new System.Drawing.Size(88, 17);
+            this.lblUserName.Size = new System.Drawing.Size(103, 20);
             this.lblUserName.TabIndex = 0;
             this.lblUserName.Tag = "";
             this.lblUserName.Text = "UserName:";
@@ -141,10 +155,10 @@
             this.btnCancel.BackColor = System.Drawing.SystemColors.Control;
             this.btnCancel.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnCancel.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.btnCancel.Location = new System.Drawing.Point(132, 195);
-            this.btnCancel.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.btnCancel.Location = new System.Drawing.Point(176, 240);
+            this.btnCancel.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btnCancel.Name = "btnCancel";
-            this.btnCancel.Size = new System.Drawing.Size(238, 25);
+            this.btnCancel.Size = new System.Drawing.Size(317, 31);
             this.btnCancel.TabIndex = 8;
             this.btnCancel.TabStop = false;
             this.btnCancel.Text = "Close";
@@ -156,11 +170,11 @@
             this.groupUsers.Controls.Add(this.lstUsers);
             this.groupUsers.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupUsers.ForeColor = System.Drawing.Color.WhiteSmoke;
-            this.groupUsers.Location = new System.Drawing.Point(3, 0);
-            this.groupUsers.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.groupUsers.Location = new System.Drawing.Point(4, 0);
+            this.groupUsers.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.groupUsers.Name = "groupUsers";
-            this.groupUsers.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
-            this.groupUsers.Size = new System.Drawing.Size(116, 191);
+            this.groupUsers.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.groupUsers.Size = new System.Drawing.Size(155, 235);
             this.groupUsers.TabIndex = 9;
             this.groupUsers.TabStop = false;
             this.groupUsers.Text = "Users";
@@ -174,11 +188,11 @@
             this.lstUsers.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lstUsers.ForeColor = System.Drawing.Color.WhiteSmoke;
             this.lstUsers.FormattingEnabled = true;
-            this.lstUsers.ItemHeight = 17;
-            this.lstUsers.Location = new System.Drawing.Point(2, 18);
-            this.lstUsers.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.lstUsers.ItemHeight = 20;
+            this.lstUsers.Location = new System.Drawing.Point(3, 22);
+            this.lstUsers.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.lstUsers.Name = "lstUsers";
-            this.lstUsers.Size = new System.Drawing.Size(112, 171);
+            this.lstUsers.Size = new System.Drawing.Size(149, 211);
             this.lstUsers.TabIndex = 0;
             this.lstUsers.SelectedIndexChanged += new System.EventHandler(this.LstUsers_SelectedIndexChanged);
             // 
@@ -188,13 +202,13 @@
             this.ctxMenuStripUser.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.removeToolStripMenuItem});
             this.ctxMenuStripUser.Name = "ctxMenuStripUser";
-            this.ctxMenuStripUser.Size = new System.Drawing.Size(114, 26);
+            this.ctxMenuStripUser.Size = new System.Drawing.Size(133, 28);
             this.ctxMenuStripUser.Opening += new System.ComponentModel.CancelEventHandler(this.CtxMenuStripUser_Opening);
             // 
             // removeToolStripMenuItem
             // 
             this.removeToolStripMenuItem.Name = "removeToolStripMenuItem";
-            this.removeToolStripMenuItem.Size = new System.Drawing.Size(113, 22);
+            this.removeToolStripMenuItem.Size = new System.Drawing.Size(132, 24);
             this.removeToolStripMenuItem.Text = "Remove";
             this.removeToolStripMenuItem.Click += new System.EventHandler(this.RemoveToolStripMenuItem_Click);
             // 
@@ -203,10 +217,10 @@
             this.btnAddNew.BackColor = System.Drawing.SystemColors.Control;
             this.btnAddNew.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnAddNew.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.btnAddNew.Location = new System.Drawing.Point(11, 195);
-            this.btnAddNew.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.btnAddNew.Location = new System.Drawing.Point(15, 240);
+            this.btnAddNew.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btnAddNew.Name = "btnAddNew";
-            this.btnAddNew.Size = new System.Drawing.Size(100, 25);
+            this.btnAddNew.Size = new System.Drawing.Size(133, 31);
             this.btnAddNew.TabIndex = 10;
             this.btnAddNew.TabStop = false;
             this.btnAddNew.Text = "Add New";
@@ -215,10 +229,10 @@
             // 
             // FrmUsers
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.DimGray;
-            this.ClientSize = new System.Drawing.Size(387, 225);
+            this.ClientSize = new System.Drawing.Size(532, 313);
             this.ControlBox = false;
             this.Controls.Add(this.btnAddNew);
             this.Controls.Add(this.groupUsers);
@@ -226,7 +240,7 @@
             this.Controls.Add(this.groupSelectedUser);
             this.ForeColor = System.Drawing.Color.WhiteSmoke;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
-            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.Name = "FrmUsers";
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
@@ -255,5 +269,6 @@
         private System.Windows.Forms.Button btnAddNew;
         private System.Windows.Forms.ContextMenuStrip ctxMenuStripUser;
         private System.Windows.Forms.ToolStripMenuItem removeToolStripMenuItem;
+        private System.Windows.Forms.Button btnRemove;
     }
 }

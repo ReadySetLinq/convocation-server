@@ -123,6 +123,7 @@ namespace ConvocationServer.Websockets
                 }
             });
         }
+
         public void Stop()
         {
             JObject message = new JObject { 

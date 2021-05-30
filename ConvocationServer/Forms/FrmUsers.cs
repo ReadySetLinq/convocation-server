@@ -102,14 +102,19 @@ namespace ConvocationServer.Forms
             SelectUser();
         }
 
+        private void btnRemove_Click(object sender, EventArgs e)
+        {
+            RemoveToolStripMenuItem_Click(sender, e);
+        }
+
         private void RemoveToolStripMenuItem_Click(object sender, EventArgs e)
         {
             // Only continue if a selected account is set
             if (selectedAccount == null) return;
 
-            DialogResult result = MessageBox.Show("Are you sure?\nThis action cannot be undone!", 
+            DialogResult result = MessageBox.Show("Are you sure?\nThis action cannot be undone!",
                                 $"Remove: {selectedAccount.UserName}",
-                                MessageBoxButtons.YesNo,  MessageBoxIcon.Warning);
+                                MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
 
             // If the user selected no, return
             if (result == DialogResult.No) return;
@@ -196,6 +201,7 @@ namespace ConvocationServer.Forms
             txtPassword.Enabled = enable;
             btnSave.Enabled = enable;
             btnReset.Enabled = enable;
+            btnRemove.Enabled = enable;
         }
     }
 }
