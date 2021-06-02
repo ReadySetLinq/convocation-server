@@ -179,8 +179,7 @@ namespace ConvocationServer.XPN
                                     switch (propType)
                                     {
                                         case PropertyType.pt_String:
-                                            publishedObject.SetPropertyString(propID, value.Trim());
-                                            break;
+                                            return publishedObject.SetPropertyString(propID, value.Trim());
                                         case PropertyType.pt_Boolean:
                                             bool val;
                                             if (bool.TryParse(value.Trim(), out val))
@@ -191,7 +190,7 @@ namespace ConvocationServer.XPN
                                             {
                                                 if (_engine.GetMaterialByName(materialName, out xpMaterial material))
                                                 {
-                                                    publishedObject.SetPropertyMaterial(propID, face, material);
+                                                    return publishedObject.SetPropertyMaterial(propID, face, material);
                                                 }
                                             }
                                             break;
@@ -223,8 +222,7 @@ namespace ConvocationServer.XPN
                             switch (propType)
                             {
                                 case PropertyType.pt_String:
-                                    publishedObject.SetPropertyString(propID, value.Trim());
-                                    break;
+                                    return publishedObject.SetPropertyString(propID, value.Trim());
                                 case PropertyType.pt_Boolean:
                                     bool val;
                                     if (bool.TryParse(value.Trim(), out val))
@@ -235,7 +233,7 @@ namespace ConvocationServer.XPN
                                     {
                                         if (_engine.GetMaterialByName(materialName, out xpMaterial material))
                                         {
-                                            publishedObject.SetPropertyMaterial(propID, face, material);
+                                            return publishedObject.SetPropertyMaterial(propID, face, material);
                                         }
                                     }
                                     break;
@@ -272,8 +270,7 @@ namespace ConvocationServer.XPN
                                     switch (propType)
                                     {
                                         case PropertyType.pt_String:
-                                            publishedObject.SetPropertyString(propID, value.Trim());
-                                            break;
+                                            return publishedObject.SetPropertyString(propID, value.Trim());
                                         case PropertyType.pt_Boolean:
                                             bool val;
                                             if (bool.TryParse(value.Trim(), out val))
@@ -284,7 +281,7 @@ namespace ConvocationServer.XPN
                                             {
                                                 if (_engine.GetMaterialByName(materialName, out xpMaterial material))
                                                 {
-                                                    publishedObject.SetPropertyMaterial(propID, face, material);
+                                                    return publishedObject.SetPropertyMaterial(propID, face, material);
                                                 }
                                             }
                                             break;
@@ -316,8 +313,7 @@ namespace ConvocationServer.XPN
                             switch (propType)
                             {
                                 case PropertyType.pt_String:
-                                    publishedObject.SetPropertyString(propID, value.Trim());
-                                    break;
+                                    return publishedObject.SetPropertyString(propID, value.Trim());
                                 case PropertyType.pt_Boolean:
                                     bool val;
                                     if (bool.TryParse(value.Trim(), out val))
@@ -328,7 +324,7 @@ namespace ConvocationServer.XPN
                                     {
                                         if (_engine.GetMaterialByName(materialName, out xpMaterial material))
                                         {
-                                            publishedObject.SetPropertyMaterial(propID, face, material);
+                                            return publishedObject.SetPropertyMaterial(propID, face, material);
                                         }
                                     }
                                     break;

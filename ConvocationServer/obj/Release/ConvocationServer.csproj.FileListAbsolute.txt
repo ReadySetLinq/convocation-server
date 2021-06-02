@@ -37,3 +37,4 @@ C:\git\convocation-server\ConvocationServer\obj\Release\ConvocationServer.csproj
 C:\git\convocation-server\ConvocationServer\obj\Release\ConvocationServer.exe
 C:\git\convocation-server\ConvocationServer\obj\Release\ConvocationServer.pdb
 C:\git\convocation-server\ConvocationServer\obj\Release\ConvocationServer.Forms.FrmInfo.resources
+C:\git\convocation-server\ConvocationServer\obj\Release\ConvocationServer.csprojAssemblyReference.cache
