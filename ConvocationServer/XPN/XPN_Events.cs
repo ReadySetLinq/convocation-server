@@ -70,7 +70,7 @@ namespace ConvocationServer.XPN
                                                              action: "start",
                                                              value: new JObject {
                                                                 { "uuid", data.Properties["uuid"]?.ToString() },
-                                                                { "response", xpn.Start()}
+                                                                { "response", xpn.Start() != null}
                                                             });
                             }
                             else if (data.Action == "stop")

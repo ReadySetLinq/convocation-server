@@ -53,39 +53,6 @@ namespace ConvocationServer.Websockets
                 return;
             }
 
-            // Make sure Xpression is started and linked before running the server
-            if (!XpnFunctions.Start())
-            {
-                parent.UpdateStatus("Xpression Error");
-                DialogResult response = MessageBox.Show("Make sure Xpression is running before starting the server!", "Failed to connect with Xpression",
-                                MessageBoxButtons.OK,
-                                MessageBoxIcon.Error);
-                parent.UpdateStatus("Stopped");
-                return;
-            }
-
-            string projectName = XpnFunctions.ProjectFileName();
-            if (projectName == null)
-            {
-                bool projectLoaded = false;
-                projectName = parent.SelectXpnProjectPath();
-                if (projectName != null)
-                {
-                    projectLoaded = XpnFunctions.LoadProject(projectName);
-                }
-
-                if (!projectLoaded)
-                {
-                    XpnFunctions.Dispose();
-                    parent.UpdateStatus("Xpression Error");
-                    DialogResult response = MessageBox.Show("Make sure a Xpression Project is open before starting the server!", "Failed to connect with Xpression",
-                                    MessageBoxButtons.OK,
-                                    MessageBoxIcon.Error);
-                    parent.UpdateStatus("Stopped");
-                    return;
-                }
-            }
-
             server = new TcpListener(IPAddress.Parse(address), Convert.ToInt32(port));
             server.Start();
 
@@ -134,6 +101,56 @@ namespace ConvocationServer.Websockets
             server.Stop();
             parent.UpdateStatus("Stopped");
             IsListening = false;
+        }
+
+        public bool CheckXPN(WebSocketSession session)
+        {
+
+            // Make sure Xpression is started and linked before running the server
+            if (XpnFunctions.Start() == null)
+            {
+                parent.UpdateStatus("Xpression Error");
+                DialogResult response = MessageBox.Show("Make sure Xpression is running before starting the server!", "Failed to connect with Xpression",
+                                MessageBoxButtons.OK,
+                                MessageBoxIcon.Error);
+
+                session.SendMessage(message: new JObject {
+                                        { "service", "status" },
+                                        { "data", new JObject {
+                                            { "type", "error" },
+                                            { "message", "Failed to connect with Xpression" }
+                                        } }
+                                    });
+                return false;
+            } else
+            {
+                return CheckProject(session);
+            }
+        }
+
+        public bool CheckProject(WebSocketSession session)
+        {
+            string projectName = XpnFunctions.ProjectFileName();
+            if (projectName == null)
+            {
+                parent.UpdateStatus("Xpression Error");
+                DialogResult response = MessageBox.Show("Make sure Xpression is running before starting the server!", "Failed to connect with Xpression",
+                                MessageBoxButtons.OK,
+                                MessageBoxIcon.Error);
+
+                session.SendMessage(message: new JObject {
+                                        { "service", "status" },
+                                        { "data", new JObject {
+                                            { "type", "error" },
+                                            { "message", "Failed to connect with Xpression Project" }
+                                        } }
+                                    });
+                return false;
+            }
+            else
+            {
+                return true;
+            }
         }
 
         public void SendTo(WebSocketSession session, JObject message)
@@ -232,6 +249,13 @@ namespace ConvocationServer.Websockets
         {
             try
             {
+                // Make sure Xpression is running with an active project
+                if (!CheckXPN(session))
+                {
+                    parent.AddMessage(message, "Error: Xpression is not started or has no project loaded", "Incoming");
+                    return;
+                }
+
                 JObject _msgObj = message.Trim().ValidateJSON();
                 if (_msgObj == null)
                 {

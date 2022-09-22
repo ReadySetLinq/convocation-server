@@ -14,6 +14,7 @@ namespace ConvocationServer
         private readonly List<Form> LstForms;
         private readonly WebSocketServer Server;
         private bool msgIsScrolling = false;
+        private static System.Timers.Timer startupTimer;
 
         public DataTable TblMessages = new DataTable();
         public Settings StorageSettings = new Settings();
@@ -60,6 +61,8 @@ namespace ConvocationServer
             WindowState = FormWindowState.Minimized;
             MinimizeToTray();
             notifyIcon.ShowBalloonTip(1000);
+
+            Startup();
         }
 
         private void FrmServer_Resize(object sender, EventArgs e)
@@ -103,6 +106,29 @@ namespace ConvocationServer
             Hide();
             showToolStripMenuItem.Text = "Show";
         }
+
+        private void Startup()
+        {
+            void OnTimedEvent(Object source, System.Timers.ElapsedEventArgs e)
+            {
+                try
+                {
+                    UpdateStatus("Starting...");
+                    Server.Start();
+                    startupTimer.Stop();
+                } catch { }
+            }
+
+            // Create a timer and set a two second interval.
+            startupTimer = new System.Timers.Timer
+            {
+                Interval = 500
+            };
+            startupTimer.Elapsed += OnTimedEvent;
+            startupTimer.AutoReset = false;
+            startupTimer.Enabled = true;
+        }
+        
 
         public void UpdateStatus(string status)
         {

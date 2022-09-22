@@ -28,14 +28,17 @@ namespace ConvocationServer.XPN
             _engine = null;
         }
 
-        public bool Start()
+        public xpEngine Start()
         {
             try
             {
-                _engine = new xpEngine();
-                return true;
+                if (_engine == null || _engine.OutputFrameBufferCount <= 0)
+                { 
+                    _engine = new xpEngine();
+                }
+                return _engine;
             }
-            catch { return false; }
+            catch { return null; }
         }
 
         public bool Stop()
