@@ -110,15 +110,12 @@ namespace ConvocationServer.Websockets
             if (XpnFunctions.Start() == null)
             {
                 parent.UpdateStatus("Xpression Error");
-                DialogResult response = MessageBox.Show("Make sure Xpression is running before starting the server!", "Failed to connect with Xpression",
-                                MessageBoxButtons.OK,
-                                MessageBoxIcon.Error);
-
+                parent.AddMessage("Error: Xpression was not detected! Make sure its running before connecting to the server.", "Error!", "Outgoing");
                 session.SendMessage(message: new JObject {
                                         { "service", "status" },
                                         { "data", new JObject {
                                             { "type", "error" },
-                                            { "message", "Failed to connect with Xpression" }
+                                            { "message", "Failed to connect with Xpression. Make sure Xpression is running before connecting to the server!" }
                                         } }
                                     });
                 return false;
@@ -134,15 +131,12 @@ namespace ConvocationServer.Websockets
             if (projectName == null)
             {
                 parent.UpdateStatus("Xpression Error");
-                DialogResult response = MessageBox.Show("Make sure Xpression is running before starting the server!", "Failed to connect with Xpression",
-                                MessageBoxButtons.OK,
-                                MessageBoxIcon.Error);
-
+                parent.AddMessage("Error: No project detected! Make sure a Xpression project is running before connecting to the server!", "Error!", "Outgoing");
                 session.SendMessage(message: new JObject {
                                         { "service", "status" },
                                         { "data", new JObject {
                                             { "type", "error" },
-                                            { "message", "Failed to connect with Xpression Project" }
+                                            { "message", "Failed to connect with Xpression Project. Make sure Xpression has a selected project before connecting to the server!" }
                                         } }
                                     });
                 return false;
@@ -249,13 +243,6 @@ namespace ConvocationServer.Websockets
         {
             try
             {
-                // Make sure Xpression is running with an active project
-                if (!CheckXPN(session))
-                {
-                    parent.AddMessage(message, "Error: Xpression is not started or has no project loaded", "Incoming");
-                    return;
-                }
-
                 JObject _msgObj = message.Trim().ValidateJSON();
                 if (_msgObj == null)
                 {
@@ -280,21 +267,25 @@ namespace ConvocationServer.Websockets
                         // Xpression
                         case "xpression":
                             // Example: {"service": "xpression", "data": {"category": "takeitem", "action": "GetTakeItemStatus", "properties": {"takeID": 1 }} }
-                            if (session.LoggedIn)
-                            {
-                                sData = sMessage.Data.ToObject<XpressionService>();
-                                XPN_Events.Execute(parent: parent, xpn: XpnFunctions, session: session, data: sData);
-                            }
-                            else
-                            {
-                                parent.AddMessage(_msgObj, "Error: Invalid login status", "Incoming");
-                                session.SendMessage(message: new JObject {
+
+                            // Make sure Xpression is running with an active project
+                            if (CheckXPN(session)) { 
+                                if (session.LoggedIn)
+                                {
+                                    sData = sMessage.Data.ToObject<XpressionService>();
+                                    XPN_Events.Execute(parent: parent, xpn: XpnFunctions, session: session, data: sData);
+                                }
+                                else
+                                {
+                                    parent.AddMessage(_msgObj, "Error: Invalid login status", "Incoming");
+                                    session.SendMessage(message: new JObject {
                                                         { "service", "status" },
                                                         { "data", new JObject {
                                                             { "type", "error" },
                                                             { "message", $"You must be logged in to access the service: {sMessage.Service}" }
                                                         } }
                                                     });
+                                }
                             }
                             break;
 
